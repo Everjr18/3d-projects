@@ -27,9 +27,11 @@ const loader = new THREE.TextureLoader()
 const earthGroup = new THREE.Group()
 scene.add(earthGroup)
 
+
+// Start Satellite //
+
 const objLoader = new OBJLoader()
 const mtlLoader = new MTLLoader()
-
 mtlLoader.load('Satelite.mtl', (mtl) => {
   mtl.preload()
   for (const material of Object.values(mtl.materials)) {
@@ -41,10 +43,13 @@ mtlLoader.load('Satelite.mtl', (mtl) => {
     root.translateX(1)
     root.translateZ(1)
     root.scale.set(0.05, 0.05, 0.05)
+    root.rotation.x = Math.PI / 4
     root.name = 'satelite'
     scene.add(root)
   })
 })
+
+// End Satellite //
 
 const geometry = new THREE.IcosahedronGeometry(1, 12)
 const material = new THREE.MeshPhongMaterial({
@@ -61,7 +66,7 @@ sunLight.position.set(-2, 0.5, 1.5)
 scene.add(sunLight)
 
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.3)
-ambientLight.position.set(0, 0, 0)
+ambientLight.position.set(0, 1, 0)
 scene.add(ambientLight)
 
 const starts = getStarfield({ numStars: 2000 })
