@@ -4,6 +4,7 @@ import getStarfield from './getStarts'
 import { getFresnelMat } from './getFresnelMat'
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js'
 import { MTLLoader } from 'three/addons/loaders/MTLLoader.js'
+import createMoon from './components/createMoon'
 
 const w = window.innerWidth
 const h = window.innerHeight
@@ -26,7 +27,6 @@ const scene = new THREE.Scene()
 const loader = new THREE.TextureLoader()
 const earthGroup = new THREE.Group()
 scene.add(earthGroup)
-
 
 // Start Satellite //
 
@@ -91,18 +91,23 @@ const glowMesh = new THREE.Mesh(geometry, fresnelMat)
 glowMesh.scale.setScalar(1.01)
 earthGroup.add(glowMesh)
 
+const moonGroup = createMoon(scene)
+earthGroup.add(moonGroup)
+
 earthGroup.rotation.z = (-23.4 * Math.PI) / 180
 const control = new OrbitControls(camera, renderer.domElement)
 control.enableDamping = true
 control.dampingFactor = 0.03
+
 function animate() {
   requestAnimationFrame(animate)
-  earthMesh.rotation.y += 0.002
+  earthMesh.rotation.y += 0.012
 
-  lightMesh.rotation.y += 0.002
-  cloudsMesh.rotation.y += 0.0023
-  glowMesh.rotation.y += 0.002
-  starts.rotation.y -= 0.0002
+  lightMesh.rotation.y += 0.012
+  cloudsMesh.rotation.y += 0.0123
+  glowMesh.rotation.y += 0.012
+  starts.rotation.y -= 0.0012  
+  earthGroup.rotation.y += 0.011;
 
   control.update()
   renderer.render(scene, camera)
