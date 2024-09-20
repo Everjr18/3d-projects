@@ -54,12 +54,14 @@ mtlLoader.load('Satelite.mtl', (mtl) => {
 const geometry = new THREE.IcosahedronGeometry(1, 12)
 const material = new THREE.MeshPhongMaterial({
   map: loader.load('/earthmap1k.jpg'),
-  specularMap: loader.load('/earthspec1k.jpg'),
-  bumpMap: loader.load('/earthcloudmaptrans.jpg'),
-  bumpScale: 0.04,
+  // specularMap: loader.load('/earthspec1k.jpg'),
+  // bumpMap: loader.load('/earthcloudmaptrans.jpg'),
+  // bumpScale: 0.04,
 })
 const earthMesh = new THREE.Mesh(geometry, material)
 earthGroup.add(earthMesh)
+const axesHelper = new THREE.AxesHelper(5)
+earthGroup.add(axesHelper)
 
 const sunLight = new THREE.DirectionalLight(0xffffff, 2.0)
 sunLight.position.set(-2, 0.5, 1.5)
@@ -99,16 +101,16 @@ const control = new OrbitControls(camera, renderer.domElement)
 control.enableDamping = true
 control.dampingFactor = 0.03
 
+earthGroup.rotateOnAxis(new THREE.Vector3( 0,1,-3), 25)
+
 function animate() {
   requestAnimationFrame(animate)
-  earthMesh.rotation.y += 0.012
-
-  lightMesh.rotation.y += 0.012
-  cloudsMesh.rotation.y += 0.0123
-  glowMesh.rotation.y += 0.012
-  starts.rotation.y -= 0.0012  
-  earthGroup.rotation.y += 0.011;
-
+  earthMesh.rotation.y += 0.0012
+  lightMesh.rotation.y += 0.0012
+  cloudsMesh.rotation.y += 0.0023
+  glowMesh.rotation.y += 0.0012
+  starts.rotation.y -= 0.00012
+  earthGroup.rotateOnAxis(earthGroup.up,0.005)  
   control.update()
   renderer.render(scene, camera)
 }
