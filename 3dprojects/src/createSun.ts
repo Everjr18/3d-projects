@@ -16,11 +16,11 @@ const createSun = (scene: THREE.Scene) => {
 	const mesh = new THREE.Mesh(geometry, material);
 	group.add(mesh);
 	group.position.set(-2, 0.5, 3);
-	group.scale.setScalar(0.4 / 2.7);
+	group.scale.setScalar(0.2 / 2.7);
 
 	const fresnelMat = getFresnelMat({ rimHex: 0xffaa00, facingHex: 0x000000 });
 	const glowMesh = new THREE.Mesh(geometry, fresnelMat);
-	glowMesh.scale.setScalar(1);
+	glowMesh.scale.setScalar(1.01);
 	group.add(glowMesh);
 
 	return group;
