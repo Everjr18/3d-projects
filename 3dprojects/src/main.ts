@@ -104,13 +104,15 @@ control.dampingFactor = 0.03
 earthGroup.rotateOnAxis(new THREE.Vector3( 0,1,-3), 25)
 
 function animate() {
+
+  const speed = 0.0015
   requestAnimationFrame(animate)
-  earthMesh.rotation.y += 0.0012
-  lightMesh.rotation.y += 0.0012
-  cloudsMesh.rotation.y += 0.0023
-  glowMesh.rotation.y += 0.0012
-  starts.rotation.y -= 0.00012
-  earthGroup.rotateOnAxis(earthGroup.up,0.005)  
+  earthMesh.rotation.y += speed
+  lightMesh.rotation.y += speed
+  cloudsMesh.rotation.y += speed + 0.002
+  glowMesh.rotation.y += speed
+  starts.rotation.y -= speed / 30
+  earthGroup.rotateOnAxis(earthGroup.up, speed / 30)  
   control.update()
   renderer.render(scene, camera)
 }
