@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-export default function getStarfield({ numStars = 500 } = {}) {
+export default function crearteStarfield({ numStars = 500 } = {}) {
 	function randomSpherePoint() {
 		const radius = Math.random() * 25 + 25;
 		const u = Math.random();
