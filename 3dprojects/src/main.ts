@@ -25,8 +25,8 @@ scene.add(starts)
 const earthGroup = new THREE.Group()
 const axesHelper = new THREE.AxesHelper(5)
 earthGroup.add(axesHelper)
-const sunGroup = createSun(scene)
-scene.add(sunGroup)
+const sun = createSun(scene)
+scene.add(sun)
 const { earthMesh, lightMesh, cloudsMesh, glowMesh } = createEarth(earthGroup)
 scene.add(earthGroup)
 createSatellite(scene)
@@ -43,7 +43,7 @@ function animate() {
   glowMesh.rotation.y += speed
   starts.rotation.y -= speed / 30
   earthGroup.rotateOnAxis(earthGroup.up, speed / 27)
-  control.update()
+  control.update()  
   renderer.render(scene, camera)
 }
 
