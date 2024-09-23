@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 export default function crearteStarfield({ numStars = 500 } = {}) {
 	function randomSpherePoint() {
-		const radius = Math.random() * 25 + 25;
+		const radius = Math.random() * 25 + 100;
 		const u = Math.random();
 		const v = Math.random();
 		const theta = 2 * Math.PI * u;
@@ -34,7 +34,7 @@ export default function crearteStarfield({ numStars = 500 } = {}) {
 	geo.setAttribute("position", new THREE.Float32BufferAttribute(verts, 3));
 	geo.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
 	const mat = new THREE.PointsMaterial({
-		size: 0.2,
+		size: 0.8,
 		vertexColors: true,
 		map: new THREE.TextureLoader().load("/circle.png"),
 	});

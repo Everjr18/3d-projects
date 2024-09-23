@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { getFresnelMat } from '../getFresnelMat'
+import { getFresnelMat } from '../shaders/getFresnelMat'
 
 const createEarth = (earthGroup: THREE.Group<THREE.Object3DEventMap>) => {
   const geometry = new THREE.IcosahedronGeometry(1, 12)
