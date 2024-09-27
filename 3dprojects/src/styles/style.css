@@ -1,3 +1,5 @@
+@import "transition-style";
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -97,40 +99,5 @@ button:hover {
   }
 }
 
-#info {
-  position: absolute;
-  top: 50px;
-  left: 4rem;
-  width: 75%;
-  text-align: start;
-  font-size: 0.8rem;
-  z-index: 100;
-  display: block;
-  line-height: 1.5rem;
-}
 
-#title {
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin-bottom: 0.25rem;
-}
 
-@media (width >=500px) {
-
-  #title {
-    font-size: 1.4rem;
-    font-weight: bold;
-    margin-bottom: 0.25rem;
-  }
-
-  #info {
-    position: absolute;
-    top: 50px;    
-    width: 75%;
-    text-align: start;
-    font-size: 1.2rem;
-    z-index: 100;
-    display: block;
-    line-height: 2.5rem;
-  }
-}

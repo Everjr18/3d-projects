@@ -33,6 +33,46 @@ createSatellite(scene)
 const moonGroup = createMoon(scene)
 earthGroup.add(moonGroup)
 
+// Configurar raycaster y vector de mouse
+const raycaster = new THREE.Raycaster()
+const mouse = new THREE.Vector2()
+
+// Escuchar el evento de clic en el mouse
+window.addEventListener('click', onMouseClick, false)
+
+function onMouseClick(event) {
+  // Actualizar las coordenadas del mouse
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+
+  // Actualizar el raycaster con la cámara y la posición del mouse
+  raycaster.setFromCamera(mouse, camera)
+
+  // Calcular los objetos que intersectan con el rayo
+  const intersects = raycaster.intersectObjects(scene.children, true) // true para buscar en objetos hijos
+
+  // Si se hace clic en un objeto, cambiar el color del objeto
+  if (intersects.length > 0) {
+    // Asegurarse de que el objeto intersectado sea un Mesh y tenga material
+    console.log(intersects)
+    for (const obj of intersects) {
+      if (obj.object instanceof THREE.Mesh && obj.object.material) {
+        const mat = obj.object.material.color
+        if (mat) {
+          const randomColor = Math.floor(Math.random() * 16777215).toString(16)
+
+          // Asigna el color aleatorio al objeto
+          obj.object.material.color.set(`#${randomColor}`)
+        }
+
+        console.log('Objeto clicado:', obj)
+      } else {
+        console.log('El objeto no es un Mesh o no tiene material.')
+      }
+    }
+  }
+}
+
 // Animation
 function animate() {
   const speed = 0.0115
@@ -43,7 +83,7 @@ function animate() {
   glowMesh.rotation.y += speed
   starts.rotation.y -= speed / 30
   earthGroup.rotateOnAxis(earthGroup.up, speed / 27)
-  control.update()  
+  control.update()
   renderer.render(scene, camera)
 }
 

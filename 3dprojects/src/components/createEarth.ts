@@ -12,11 +12,13 @@ const createEarth = (earthGroup: THREE.Group<THREE.Object3DEventMap>) => {
   })
   const earthMesh = new THREE.Mesh(geometry, material)
   earthGroup.add(earthMesh)
+  earthMesh.name = 'earthMesh'
   const lightsMat = new THREE.MeshBasicMaterial({
     map: loader.load('/earthlights1k.jpg'),
     blending: THREE.AdditiveBlending,
   })
   const lightMesh = new THREE.Mesh(geometry, lightsMat)
+  lightMesh.name = 'lightMesh'
   earthGroup.add(lightMesh)
   const cloudsMat = new THREE.MeshStandardMaterial({
     map: loader.load('/earthcloudmap.jpg'),
@@ -24,12 +26,15 @@ const createEarth = (earthGroup: THREE.Group<THREE.Object3DEventMap>) => {
     alphaMap: loader.load('/earthcloudmaptrans.jpg'),
   })
   const cloudsMesh = new THREE.Mesh(geometry, cloudsMat)
+  cloudsMesh.name = 'cloudsMesh'
   cloudsMesh.scale.setScalar(1.003)
   earthGroup.add(cloudsMesh)
   const fresnelMat = getFresnelMat({ rimHex: 0x0088ff, facingHex: 0x000000 })
   const glowMesh = new THREE.Mesh(geometry, fresnelMat)
   glowMesh.scale.setScalar(1.01)
+  glowMesh.name = 'glowMesh'
   earthGroup.add(glowMesh)
+  earthGroup.name = 'earthGroup'
 
   return {
     earthMesh,
