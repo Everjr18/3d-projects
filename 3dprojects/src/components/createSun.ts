@@ -17,17 +17,10 @@ const createSun = (scene: THREE.Scene) => {
 
   // Crear la malla del sol
   const mesh = new THREE.Mesh(geometry, material)
-  mesh.name = "sunObject"
+  mesh.name = 'sunMesh'
   group.add(mesh)
   group.position.set(-50, 0.5, 3)
   group.scale.setScalar(5)
-
-  // Crear el glowMesh con el material fresnel
-  const fresnelMat = getFresnelMat({ rimHex: 0xffaa00, facingHex: 0x000000 })
-  const glowMesh = new THREE.Mesh(geometry, fresnelMat)
-  mesh.name = "sunGlow"
-  glowMesh.scale.setScalar(1)
-  group.add(glowMesh)
 
   return group
 }

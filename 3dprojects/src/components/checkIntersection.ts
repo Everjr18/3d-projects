@@ -8,6 +8,26 @@ function checkIntersection(
   camera: THREE.PerspectiveCamera,
   scene: THREE.Scene,
 ) {
+  const textoEarth = document.getElementById('textoEarth')
+  const textoSun = document.getElementById('textoSun')
+  const textoMoon = document.getElementById('textoMoon')
+  const textoSatellite = document.getElementById('textoSatellite')
+
+  // Función auxiliar para verificar si alguna ventana ya está visible
+  const isAnyVisible = (): boolean => {
+    return (
+      (textoEarth && textoEarth.style.display === 'flex') ||
+      (textoSun && textoSun.style.display === 'flex') ||
+      (textoMoon && textoMoon.style.display === 'flex') ||
+      (textoSatellite && textoSatellite.style.display === 'flex')
+    )
+  }
+
+  // Si alguna ventana está visible, no hacemos nada
+  if (isAnyVisible()) {
+    return
+  }
+
   // Actualizar las coordenadas del mouse
   const mouse = new THREE.Vector2()
   mouse.x = (x / window.innerWidth) * 2 - 1
@@ -21,21 +41,18 @@ function checkIntersection(
 
   // Si se hace clic en un objeto, cambiar el color del objeto
   if (intersects.length > 0) {
-    // Asegurarse de que el objeto intersectado sea un Mesh y tenga material
-    console.log(intersects)
     for (const obj of intersects) {
-      if (obj.object instanceof THREE.Mesh && obj.object.material) {
-        const mat = obj.object.material.color
-        if (mat) {
-          const randomColor = Math.floor(Math.random() * 16777215).toString(16)
+      if (obj.object instanceof THREE.Mesh) {
+        if (obj.object.name === 'earthMesh' && textoEarth)
+          textoEarth.style.display = 'flex'
+        if (obj.object.name === 'sunMesh' && textoSun)
+          textoSun.style.display = 'flex'
+        if (obj.object.name === 'moonMesh' && textoMoon)
+          textoMoon.style.display = 'flex'
+        if (obj.object.name === 'satelliteMesh' && textoSatellite)
+          textoSatellite.style.display = 'flex'
 
-          // Asigna el color aleatorio al objeto
-          obj.object.material.color.set(`#${randomColor}`)
-        }
-
-        console.log('Objeto clicado:', obj)
-      } else {
-        console.log('El objeto no es un Mesh o no tiene material.')
+        console.log(obj.object.name)
       }
     }
   }

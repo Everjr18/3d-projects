@@ -15,6 +15,7 @@ const createMoon = (scene: THREE.Scene) => {
   group.position.set(0, 0, 3.5)
   group.scale.setScalar(1 / 2.7)
   scene.add(group)
+  mesh.name = 'moonMesh'
 
   return group
 }
