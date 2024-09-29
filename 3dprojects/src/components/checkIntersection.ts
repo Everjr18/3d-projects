@@ -1,4 +1,3 @@
-// Configurar raycaster y vector de mouse
 import * as THREE from 'three'
 
 function checkIntersection(
@@ -41,18 +40,31 @@ function checkIntersection(
 
   // Si se hace clic en un objeto, cambiar el color del objeto
   if (intersects.length > 0) {
+    let alreadyDisplayed = false // Bandera para verificar si se ha activado una ventana
+
     for (const obj of intersects) {
       if (obj.object instanceof THREE.Mesh) {
-        if (obj.object.name === 'earthMesh' && textoEarth)
-          textoEarth.style.display = 'flex'
-        if (obj.object.name === 'sunMesh' && textoSun)
-          textoSun.style.display = 'flex'
-        if (obj.object.name === 'moonMesh' && textoMoon)
-          textoMoon.style.display = 'flex'
-        if (obj.object.name === 'satelliteMesh' && textoSatellite)
-          textoSatellite.style.display = 'flex'
+        if (!alreadyDisplayed) {
+          // Solo si no se ha mostrado ninguna ventana
+          if (obj.object.name === 'earthMesh' && textoEarth) {
+            textoEarth.style.display = 'flex'
+            alreadyDisplayed = true // Marcar que ya se mostró una ventana
+          }
+          if (obj.object.name === 'sunMesh' && textoSun) {
+            textoSun.style.display = 'flex'
+            alreadyDisplayed = true
+          }
+          if (obj.object.name === 'moonMesh' && textoMoon) {
+            textoMoon.style.display = 'flex'
+            alreadyDisplayed = true
+          }
+          if (obj.object.name === 'satelliteMesh' && textoSatellite) {
+            textoSatellite.style.display = 'flex'
+            alreadyDisplayed = true
+          }
 
-        console.log(obj.object.name)
+          console.log(obj.object.name)
+        }
       }
     }
   }
