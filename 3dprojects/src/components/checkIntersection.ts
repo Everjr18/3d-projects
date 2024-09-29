@@ -13,7 +13,7 @@ function checkIntersection(
   const textoSatellite = document.getElementById('textoSatellite')
 
   // Función auxiliar para verificar si alguna ventana ya está visible
-  const isAnyVisible = (): boolean => {
+  const isAnyVisible = (): boolean | null => {
     return (
       (textoEarth && textoEarth.style.display === 'flex') ||
       (textoSun && textoSun.style.display === 'flex') ||

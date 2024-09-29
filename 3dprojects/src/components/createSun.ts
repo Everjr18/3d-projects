@@ -1,6 +1,5 @@
 import * as THREE from 'three'
 import { getSunMaterial } from '../shaders/getSunMaterial' // Asegúrate de importar tu shader
-import { getFresnelMat } from '../shaders/getFresnelMat'
 
 const createSun = (scene: THREE.Scene) => {
   const group = new THREE.Group()
