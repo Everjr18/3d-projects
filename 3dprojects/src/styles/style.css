@@ -48,11 +48,16 @@ h1 {
   align-items: start;
   justify-content: end;
   position: absolute;
-  touch-action: none;
-  width: 100%;
-  background-color: #FFFFFF40;
-  height: 100%;
-  padding-top: 1rem;
+  left: 1rem;
+  right: 1rem;  
+  top: 1rem;
+  bottom: 1rem;  
+  width: calc(100% - 2rem);
+  background-color: #FFFFFF90;
+  height: calc(100% - 3rem); 
+  padding-top: 1rem; 
+  color: black;
+  font-weight: bolder;
 }
 
 .logo {
@@ -79,16 +84,16 @@ h1 {
 }
 
 button {  
-  border-radius: 8px;
+  border-radius: 0.5rem;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  margin-right: 1rem;
-  font-size: 1em;
+  padding: 0.1rem 1rem;
+  margin: 0.5rem;
+  font-size: 2rem;
   font-weight: 500;
   font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s; 
 }
 
 button:hover {
