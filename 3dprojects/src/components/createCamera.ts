@@ -9,7 +9,7 @@ const createCamera = () => {
   const far = 1000
 
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
-  camera.position.z = 5
+  camera.position.z = 7
   return camera
 }
 
