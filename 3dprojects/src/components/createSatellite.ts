@@ -17,7 +17,7 @@ const createSatellite = (scene: THREE.Scene) => {
       root.translateZ(1)
       root.scale.set(0.05, 0.05, 0.05)
       root.rotation.x = Math.PI / 4
-      root.name = 'satelite'
+      root.children[0].name = 'satelliteMesh'      
       scene.add(root)
     })
   })
