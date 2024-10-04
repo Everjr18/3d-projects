@@ -40,7 +40,7 @@ window.addEventListener(
   'click',
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   (event: any) =>
-    checkIntersection(event.clientX, event.clientY, raycaster, camera, scene),
+    checkIntersection(event.clientX, event.clientY, raycaster, camera, scene, control),
   false,
 )
 
