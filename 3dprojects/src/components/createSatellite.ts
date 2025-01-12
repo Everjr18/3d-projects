@@ -5,13 +5,13 @@ import { MTLLoader } from 'three/addons/loaders/MTLLoader.js'
 const createSatellite = (scene: THREE.Scene) => {
   const objLoader = new OBJLoader()
   const mtlLoader = new MTLLoader()
-  mtlLoader.load('Satelite.mtl', (mtl) => {
+  mtlLoader.load('public/obj/Satelite.mtl', (mtl) => {
     mtl.preload()
     for (const material of Object.values(mtl.materials)) {
       material.side = THREE.DoubleSide
     }
     objLoader.setMaterials(mtl)
-    objLoader.load('/Satelite.obj', (root) => {
+    objLoader.load('public/obj/Satelite.obj', (root) => {
       root.translateY(1)
       root.translateX(1)
       root.translateZ(1)

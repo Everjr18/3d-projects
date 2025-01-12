@@ -1,14 +1,14 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-import createStarfield from './components/createStarfield'
-import createMoon from './components/createMoon'
-import createSun from './components/createSun'
-import createCamera from './components/createCamera'
-import createRenderer from './components/createRenderer'
-import createSatellite from './components/createSatellite'
-import createEarth from './components/createEarth'
-import createLights from './components/createLights'
-import checkIntersection from './components/checkIntersection'
+import createStarfield from '../../src/components/createStarfield'
+import createMoon from '../../src/components/createMoon'
+import createSun from '../../src/components/createSun'
+import createCamera from '../../src/components/createCamera'
+import createRenderer from '../../src/components/createRenderer'
+import createSatellite from '../../src/components/createSatellite'
+import createEarth from '../../src/components/createEarth'
+import createLights from '../../src/components/createLights'
+import checkIntersection from '../../src/components/checkIntersection'
 
 // Configuration
 const renderer = createRenderer()

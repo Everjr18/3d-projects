@@ -1,4 +1,4 @@
-@import "transition-style";
+@import "../../node_modules/transition-style";
 
 @tailwind base;
 @tailwind components;

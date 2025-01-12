@@ -5,25 +5,25 @@ const createEarth = (earthGroup: THREE.Group<THREE.Object3DEventMap>) => {
   const geometry = new THREE.IcosahedronGeometry(1, 12)
   const loader = new THREE.TextureLoader()
   const material = new THREE.MeshPhongMaterial({
-    map: loader.load('/earthmap1k.jpg'),
-    specularMap: loader.load('/earthspec1k.jpg'),
-    bumpMap: loader.load('/earthcloudmaptrans.jpg'),
+    map: loader.load('public/img/earthmap1k.jpg'),
+    specularMap: loader.load('public/img/earthspec1k.jpg'),
+    bumpMap: loader.load('public/img/earthcloudmaptrans.jpg'),
     bumpScale: 0.04,
   })
-  const earthMesh = new THREE.Mesh(geometry, material)
+   const earthMesh = new THREE.Mesh(geometry, material)
   earthGroup.add(earthMesh)
   earthMesh.name = 'earthMesh'
   const lightsMat = new THREE.MeshBasicMaterial({
-    map: loader.load('/earthlights1k.jpg'),
+    map: loader.load('public/img/earthlights1k.jpg'),
     blending: THREE.AdditiveBlending,
   })
   const lightMesh = new THREE.Mesh(geometry, lightsMat)
   lightMesh.name = 'lightMesh'
   earthGroup.add(lightMesh)
   const cloudsMat = new THREE.MeshStandardMaterial({
-    map: loader.load('/earthcloudmap.jpg'),
+    map: loader.load('public/img/earthcloudmap.jpg'),
     blending: THREE.AdditiveBlending,
-    alphaMap: loader.load('/earthcloudmaptrans.jpg'),
+    alphaMap: loader.load('public/img/earthcloudmaptrans.jpg'),
   })
   const cloudsMesh = new THREE.Mesh(geometry, cloudsMat)
   cloudsMesh.name = 'cloudsMesh'

@@ -1,27 +1,16 @@
 import * as THREE from 'three'
-import { getSunMaterial } from '../shaders/getSunMaterial' // Asegúrate de importar tu shader
+import { getSunMaterial } from '../shaders/getSunMaterial'
+import createSphere from "./createSphere/createSphere.ts";
 
 const createSun = (scene: THREE.Scene) => {
-  const group = new THREE.Group()
-  scene.add(group)
 
-  const geometry = new THREE.IcosahedronGeometry(1, 12)
-
-  // Usar el material del sol con textura
   const material = getSunMaterial({
-    coreColor: 0xffff00, // Color del núcleo
-    rimColor: 0xffaa00, // Color del borde
-    textureUrl: '/sun.jpg', // Ruta de la textura
+    coreColor: 0xffff00,
+    rimColor: 0xffaa00,
+    textureUrl: 'public/img/sun.jpg',
   })
 
-  // Crear la malla del sol
-  const mesh = new THREE.Mesh(geometry, material)
-  mesh.name = 'sunMesh'
-  group.add(mesh)
-  group.position.set(-50, 0.5, 3)
-  group.scale.setScalar(5)
-
-  return group
+  return createSphere({ scene, material, name: "sunMesh", position: new THREE.Vector3(-50, 0, 3), scale: 5});
 }
 
 export default createSun
