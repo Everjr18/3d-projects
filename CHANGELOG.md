@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - Add git-cliff to project
 - Refactor arquitecture
+- Add README.md to project
 
 ## [1.0] - 2025-01-12
 
