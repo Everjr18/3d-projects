@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import type PreviewScene from './createPreviewScene'
 
 function checkIntersection(
   x: number,
@@ -8,30 +9,17 @@ function checkIntersection(
   camera: THREE.PerspectiveCamera,
   scene: THREE.Scene,
   control: OrbitControls,
+  previewScene: PreviewScene | null = null,
 ) {
-  const textoEarth = document.getElementById('textoEarth')
-  const textoSun = document.getElementById('textoSun')
-  const textoMoon = document.getElementById('textoMoon')
-  const textoSatellite = document.getElementById('textoSatellite')
-
-  // Función auxiliar para verificar si alguna ventana ya está visible
-  const isAnyVisible = (): boolean | null => {
-    return (
-      (textoEarth && textoEarth.style.display === 'flex') ||
-      (textoSun && textoSun.style.display === 'flex') ||
-      (textoMoon && textoMoon.style.display === 'flex') ||
-      (textoSatellite && textoSatellite.style.display === 'flex')
-    )
-  }
-
-  // Si alguna ventana está visible, no hacemos nada
-  if (isAnyVisible()) {
-    return
-  }
+  const infoContainer = document.getElementById('info-container')
+  const previewContainer = document.getElementById('preview-container')
 
   // Actualizar las coordenadas del mouse
+  // Ajustar x para el canvas (después del sidebar de 400px)
+  const sidebarWidth = 400
+  const canvasWidth = window.innerWidth - sidebarWidth
   const mouse = new THREE.Vector2()
-  mouse.x = (x / window.innerWidth) * 2 - 1
+  mouse.x = ((x - sidebarWidth) / canvasWidth) * 2 - 1
   mouse.y = -(y / window.innerHeight) * 2 + 1
 
   // Actualizar el raycaster con la cámara y la posición del mouse
@@ -40,65 +28,54 @@ function checkIntersection(
   // Calcular los objetos que intersectan con el rayo
   const intersects = raycaster.intersectObjects(scene.children, true) // true para buscar en objetos hijos
 
-  // Si se hace clic en un objeto, cambiar el color del objeto
-  if (intersects.length > 0) {
-    let alreadyDisplayed = false // Bandera para verificar si se ha activado una ventana
-
+  // Si se hace clic en un objeto, mostrar info en el sidebar
+  if (intersects.length > 0 && infoContainer) {
     for (const obj of intersects) {
       if (obj.object instanceof THREE.Mesh) {
-        if (!alreadyDisplayed) {
-          const worldPosition = new THREE.Vector3()
-          obj.object.getWorldPosition(worldPosition)
-          console.log(worldPosition)
-          // Solo si no se ha mostrado ninguna ventana
-          if (obj.object.name === 'earthMesh' && textoEarth) {
-            textoEarth.style.display = 'flex'
-            alreadyDisplayed = true
-            camera.position.set(
-              worldPosition.x + 5,
-              worldPosition.y + 2,
-              worldPosition.z + 5,
-            )
-            camera.lookAt(worldPosition)
-            control.target.copy(worldPosition)
-            control.update()
+        const worldPosition = new THREE.Vector3()
+        obj.object.getWorldPosition(worldPosition)
+
+        let templateId = ''
+        let cameraOffset = { x: 5, y: 2, z: 5 }
+
+        if (obj.object.name === 'earthMesh') {
+          templateId = 'earth-info'
+          cameraOffset = { x: 5, y: 2, z: 5 }
+        } else if (obj.object.name === 'sunMesh') {
+          templateId = 'sun-info'
+          cameraOffset = { x: 15, y: 6, z: 15 }
+        } else if (obj.object.name === 'moonMesh') {
+          templateId = 'moon-info'
+          cameraOffset = { x: 2, y: 2, z: 2 }
+        } else if (obj.object.name === 'satelliteMesh') {
+          templateId = 'satellite-info'
+          cameraOffset = { x: 5, y: 2, z: 5 }
+        }
+
+        if (templateId) {
+          const template = document.getElementById(templateId) as HTMLTemplateElement
+          if (template) {
+            infoContainer.innerHTML = ''
+            const content = template.content.cloneNode(true)
+            infoContainer.appendChild(content)
           }
-          if (obj.object.name === 'sunMesh' && textoSun) {
-            textoSun.style.display = 'flex'
-            alreadyDisplayed = true
-            camera.position.set(
-              worldPosition.x + 15,
-              worldPosition.y + 6,
-              worldPosition.z + 15,
-            )
-            camera.lookAt(worldPosition)
-            control.target.copy(worldPosition)
-            control.update()
+
+          // Show preview
+          if (previewScene && previewContainer) {
+            previewContainer.classList.remove('hidden')
+            previewScene.showObject(obj.object.name)
           }
-          if (obj.object.name === 'moonMesh' && textoMoon) {
-            textoMoon.style.display = 'flex'
-            alreadyDisplayed = true
-            camera.position.set(
-              worldPosition.x + 2,
-              worldPosition.y + 2,
-              worldPosition.z + 2,
-            )
-            camera.lookAt(worldPosition)
-            control.target.copy(worldPosition)
-            control.update()
-          }
-          if (obj.object.name === 'satelliteMesh' && textoSatellite) {
-            textoSatellite.style.display = 'flex'
-            alreadyDisplayed = true
-            camera.position.set(
-              worldPosition.x + 5,
-              worldPosition.y + 2,
-              worldPosition.z + 5,
-            )
-            camera.lookAt(worldPosition)
-            control.target.copy(worldPosition)
-            control.update()
-          }
+
+          camera.position.set(
+            worldPosition.x + cameraOffset.x,
+            worldPosition.y + cameraOffset.y,
+            worldPosition.z + cameraOffset.z,
+          )
+          camera.lookAt(worldPosition)
+          control.target.copy(worldPosition)
+          control.update()
+
+          break
         }
       }
     }
