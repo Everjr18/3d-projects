@@ -1,13 +1,11 @@
 import * as THREE from 'three'
 import { CelestialBody } from './CelestialBody'
 import { LayeredMeshComponent } from '../base/LayeredMeshComponent'
-import { RotationComponent } from '../base/RotationComponent'
 import { CELESTIAL_BODIES, TEXTURE_PATHS, ANIMATION_CONFIG } from '../../config/constants'
 import { getFresnelMat } from '../../shaders/getFresnelMat'
 
 export class Earth extends CelestialBody {
   private layers: LayeredMeshComponent
-  private rotationComponent: RotationComponent
 
   constructor() {
     super({
@@ -19,9 +17,6 @@ export class Earth extends CelestialBody {
     })
 
     this.layers = new LayeredMeshComponent('EarthLayers')
-    this.rotationComponent = new RotationComponent(this.group, {
-      speed: { y: ANIMATION_CONFIG.EARTH_ROTATION_SPEED },
-    })
   }
 
   async create(): Promise<void> {

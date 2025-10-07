@@ -27,8 +27,6 @@ export class TexturedSphereComponent extends MeshComponent {
   constructor(config: TexturedSphereConfig = {}) {
     const {
       radius = 1,
-      widthSegments = 32,
-      heightSegments = 32,
       textureMap,
       bumpMap,
       specularMap,

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { getFresnelMat } from "./getFresnelMat";
+import { getFresnelMat } from "./shaders/getFresnelMat";
 
 const createSun = (scene: THREE.Scene) => {
 	const loader = new THREE.TextureLoader();

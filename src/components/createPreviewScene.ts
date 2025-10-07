@@ -62,9 +62,9 @@ class PreviewScene {
     switch (objectName) {
       case 'earthMesh':
         const earthMaterial = new THREE.MeshPhongMaterial({
-          map: loader.load('public/img/earthmap1k.jpg'),
-          specularMap: loader.load('public/img/earthspec1k.jpg'),
-          bumpMap: loader.load('public/img/earthcloudmaptrans.jpg'),
+          map: loader.load('/img/earthmap1k.jpg'),
+          specularMap: loader.load('/img/earthspec1k.jpg'),
+          bumpMap: loader.load('/img/earthcloudmaptrans.jpg'),
           bumpScale: 0.04,
           shininess: 30,
           specular: 0x333333,
@@ -73,15 +73,15 @@ class PreviewScene {
 
         // Add city lights
         const lightsMaterial = new THREE.MeshBasicMaterial({
-          map: loader.load('public/img/earthlights1k.jpg'),
+          map: loader.load('/img/earthlights1k.jpg'),
           blending: THREE.AdditiveBlending,
         })
         const lightsMesh = new THREE.Mesh(geometry, lightsMaterial)
 
         // Add clouds
         const cloudsMat = new THREE.MeshStandardMaterial({
-          map: loader.load('public/img/earthcloudmap.jpg'),
-          alphaMap: loader.load('public/img/earthcloudmaptrans.jpg'),
+          map: loader.load('/img/earthcloudmap.jpg'),
+          alphaMap: loader.load('/img/earthcloudmaptrans.jpg'),
           transparent: true,
           opacity: 0.8,
           roughness: 1.0,
@@ -104,8 +104,8 @@ class PreviewScene {
 
       case 'moonMesh':
         const moonMaterial = new THREE.MeshPhongMaterial({
-          map: loader.load('public/img/moonmap1k.jpg'),
-          bumpMap: loader.load('public/img/moonbump1k.jpg'),
+          map: loader.load('/img/moonmap1k.jpg'),
+          bumpMap: loader.load('/img/moonbump1k.jpg'),
           bumpScale: 0.04,
           shininess: 5,
         })
@@ -117,7 +117,7 @@ class PreviewScene {
         const sunMaterial = getSunMaterial({
           coreColor: 0xffff00,
           rimColor: 0xffaa00,
-          textureUrl: 'public/img/sun.jpg',
+          textureUrl: '/img/sun.jpg',
         })
         mesh = new THREE.Mesh(geometry, sunMaterial)
         this.currentObject = mesh
@@ -127,13 +127,13 @@ class PreviewScene {
         // Load actual satellite model
         const objLoader = new OBJLoader()
         const mtlLoader = new MTLLoader()
-        mtlLoader.load('public/obj/Satelite.mtl', (mtl) => {
+        mtlLoader.load('/obj/Satelite.mtl', (mtl) => {
           mtl.preload()
           for (const material of Object.values(mtl.materials)) {
             material.side = THREE.DoubleSide
           }
           objLoader.setMaterials(mtl)
-          objLoader.load('public/obj/Satelite.obj', (root) => {
+          objLoader.load('/obj/Satelite.obj', (root) => {
             root.scale.set(0.5, 0.5, 0.5)
             root.rotation.x = Math.PI / 4
 

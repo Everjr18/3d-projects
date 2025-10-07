@@ -5,8 +5,8 @@ const createMoon = (scene: THREE.Scene) => {
   const loader = new THREE.TextureLoader()
 
   const material = new THREE.MeshPhongMaterial({
-    map: loader.load('public/img/moonmap1k.jpg'),
-    bumpMap: loader.load('public/img/moonbump1k.jpg'),
+    map: loader.load('/img/moonmap1k.jpg'),
+    bumpMap: loader.load('/img/moonbump1k.jpg'),
     bumpScale: 0.04,
   })
 
