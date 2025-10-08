@@ -1,6 +1,6 @@
 import * as THREE from 'three'
-import { getFresnelMat } from '../shaders/getFresnelMat'
-import { getSunMaterial } from '../shaders/getSunMaterial'
+import { getFresnelMat } from '../../shaders/getFresnelMat'
+import { getSunMaterial } from '../../shaders/getSunMaterial'
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js'
 import { MTLLoader } from 'three/addons/loaders/MTLLoader.js'
 

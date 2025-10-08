@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a Three.js-based interactive Solar System visualization that displays Earth, Moon, Sun, and a Satellite in 3D with clickable information panels. The application uses TypeScript, Vite for development/building, and Tailwind CSS with DaisyUI for styling.
 
+The UI is in Spanish ("El Sistema Solar") with a sidebar containing object information and interactive controls for scene parameters (brightness, rotation speed, FOV, lighting, cloud opacity, star speed, and camera auto-rotation).
+
 ## Development Commands
 
 - `npm run dev` - Start development server with Vite
@@ -47,12 +49,13 @@ This new architecture is **not yet integrated** into the main application. When 
 ## Key Implementation Details
 
 ### Interaction System
-- Raycasting detects clicks on celestial bodies
+- Raycasting detects clicks on celestial bodies (`checkIntersection` in `src/components/checkIntersection.ts`)
 - Each object has a named mesh (e.g., `earthMesh`, `moonMesh`, `sunMesh`, `satelliteMesh`)
 - Clicking an object:
-  1. Shows an info panel (`textoEarth`, `textoMoon`, etc.)
-  2. Animates camera to focus on the object
-  3. Updates OrbitControls target
+  1. Shows info from HTML templates (`earth-info`, `moon-info`, `sun-info`, `satellite-info`) in the `info-container` sidebar element
+  2. Shows a rotating preview of the object in a separate canvas (`preview-canvas`) using the PreviewScene class
+  3. Animates camera to focus on the object with predefined offsets
+  4. Updates OrbitControls target to the clicked object's world position
 
 ### Earth Rendering
 Earth uses multiple layered meshes:
@@ -63,26 +66,62 @@ Earth uses multiple layered meshes:
 
 ### Animation
 Main animation loop in `public/js/main.ts`:
-- Earth rotates on its axis
-- Clouds rotate slightly faster than surface
-- Earth-Moon system orbits together
-- Star field slowly counter-rotates
+- Earth rotates on its axis (configurable speed via slider)
+- Clouds rotate slightly faster than surface (`speed + 0.002`)
+- Earth-Moon system orbits together (`earthGroup.rotateOnAxis`)
+- Star field slowly counter-rotates (`speed / 30`)
 
-### UI
-- DaisyUI components styled with Tailwind CSS
-- Info panels positioned absolutely with `id` attributes
-- Close buttons hide panels by changing `display` style
+### UI and Controls
+- **Sidebar**: Fixed 400px width on the left containing info panels and controls
+- **Canvas**: Fills remaining viewport space (`window.innerWidth - 400`)
+- **DaisyUI components** styled with Tailwind CSS (theme: "forest")
+- **HTML templates**: Info content stored as `<template>` elements, cloned on click
+- **Live controls** (sliders and checkbox):
+  - Brightness (tone mapping exposure)
+  - Rotation speed multiplier
+  - Camera FOV
+  - Ambient light intensity
+  - Directional light intensity
+  - Cloud opacity
+  - Star rotation speed
+  - Auto-rotate camera toggle
+
+### Satellite Rendering
+The satellite uses OBJ/MTL model loading:
+- Models located in `/obj/Satelite.obj` and `/obj/Satelite.mtl`
+- Uses `OBJLoader` and `MTLLoader` from Three.js addons
+- Materials set to `DoubleSide` to prevent culling issues
+- Scaled down to 0.05 and rotated for proper display
+
+### Preview Scene
+Separate mini-scene in the sidebar (`createPreviewScene.ts`):
+- Independent Three.js scene, camera, and renderer
+- Recreates clicked object with same materials/layers
+- Provides isolated rotating view of selected celestial body
+- Async loading for satellite model
 
 ## File Structure
 ```
 ├── public/
-│   ├── js/main.ts          # Main entry point
-│   ├── img/                # Textures and images
-│   └── css/style.css       # Styles
+│   ├── js/
+│   │   └── main.ts              # Main entry point, animation loop, UI event handlers
+│   ├── img/                     # Textures (earth, moon, sun maps)
+│   ├── obj/                     # 3D models (Satelite.obj/mtl)
+│   └── css/style.css
 ├── src/
-│   ├── components/         # Factory functions + new component system
-│   ├── shaders/            # Custom shaders (Fresnel, Sun material)
-│   └── vite-env.d.ts
-├── index.html              # HTML with UI panels
+│   ├── components/
+│   │   ├── base/                # New OOP base components (not yet integrated)
+│   │   ├── entities/            # New OOP entity classes (not yet integrated)
+│   │   ├── create*.ts           # Factory functions (CURRENTLY ACTIVE)
+│   │   ├── checkIntersection.ts # Raycasting and click handling
+│   │   └── createPreviewScene.ts # Sidebar preview renderer
+│   ├── shaders/
+│   │   ├── getFresnelMat.ts     # Atmospheric glow shader
+│   │   └── getSunMaterial.ts    # Sun shader material
+│   ├── config/
+│   │   └── constants.ts         # Centralized config (for new architecture)
+│   └── utils/
+│       └── EventEmitter.ts      # Event system (for new architecture)
+├── index.html                   # HTML structure, sidebar UI, templates
 └── package.json
 ```

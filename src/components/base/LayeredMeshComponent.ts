@@ -1,111 +1,72 @@
-import * as THREE from 'three'
+import * as THREE from 'three';
+import { SceneObject } from './SceneObject';
 
-/**
- * Configuration for a single layer
- */
 export interface LayerConfig {
-  name: string
-  mesh: THREE.Mesh
-  scale?: number
-  rotationSpeed?: number
+  name: string;
+  mesh: THREE.Mesh;
+  scale?: number;
+  rotationSpeed?: number;
 }
 
-/**
- * Component for managing multiple layers of meshes
- * Useful for objects with clouds, glow effects, atmospheres, etc.
- */
-export class LayeredMeshComponent {
-  private group: THREE.Group
-  private layers: Map<string, LayerConfig> = new Map()
-
+export class LayeredMeshComponent extends SceneObject {
   constructor(name: string = 'LayeredObject') {
-    this.group = new THREE.Group()
-    this.group.name = name
-  }
+    super();
 
-  /**
-   * Add a layer to the object
-   */
-  addLayer(config: LayerConfig): void {
-    const { name, mesh, scale = 1 } = config
+    const m_group = new THREE.Group();
+    const m_layers = new Map<string, LayerConfig>();
 
-    mesh.name = name
-    mesh.scale.setScalar(scale)
+    m_group.name = name;
+    this.setObject3D(m_group);
 
-    this.layers.set(name, config)
-    this.group.add(mesh)
-  }
+    this.addLayer = addLayer;
+    this.removeLayer = removeLayer;
+    this.getLayer = getLayer;
+    this.getAllLayers = getAllLayers;
+    this.getGroup = getGroup;
+    this.update = update;
+    function addLayer(config: LayerConfig): void {
+      const { name, mesh, scale = 1 } = config;
 
-  /**
-   * Remove a layer by name
-   */
-  removeLayer(name: string): void {
-    const layer = this.layers.get(name)
-    if (layer) {
-      this.group.remove(layer.mesh)
-      this.layers.delete(name)
+      mesh.name = name;
+      mesh.scale.setScalar(scale);
+
+      m_layers.set(name, config);
+      m_group.add(mesh);
+    }
+
+    function removeLayer(name: string): void {
+      const layer = m_layers.get(name);
+      if (layer) {
+        m_group.remove(layer.mesh);
+        m_layers.delete(name);
+      }
+    }
+
+    function getLayer(name: string): THREE.Mesh | undefined {
+      return m_layers.get(name)?.mesh;
+    }
+
+    function getAllLayers(): Map<string, LayerConfig> {
+      return m_layers;
+    }
+
+    function getGroup(): THREE.Group {
+      return m_group;
+    }
+
+    function update(deltaTime: number): void {
+      m_layers.forEach((layer) => {
+        if (layer.rotationSpeed) {
+          layer.mesh.rotation.y += layer.rotationSpeed * deltaTime;
+        }
+      });
     }
   }
 
-  /**
-   * Get a specific layer mesh
-   */
-  getLayer(name: string): THREE.Mesh | undefined {
-    return this.layers.get(name)?.mesh
-  }
-
-  /**
-   * Get all layers
-   */
-  getAllLayers(): Map<string, LayerConfig> {
-    return this.layers
-  }
-
-  /**
-   * Get the group containing all layers
-   */
-  getGroup(): THREE.Group {
-    return this.group
-  }
-
-  /**
-   * Update all layers (handles rotation if configured)
-   */
-  update(deltaTime: number): void {
-    this.layers.forEach((layer) => {
-      if (layer.rotationSpeed) {
-        layer.mesh.rotation.y += layer.rotationSpeed * deltaTime
-      }
-    })
-  }
-
-  /**
-   * Set position for the entire group
-   */
-  setPosition(x: number, y: number, z: number): void {
-    this.group.position.set(x, y, z)
-  }
-
-  /**
-   * Set scale for the entire group
-   */
-  setScale(scale: number): void {
-    this.group.scale.setScalar(scale)
-  }
-
-  /**
-   * Clean up resources
-   */
-  dispose(): void {
-    this.layers.forEach((layer) => {
-      layer.mesh.geometry.dispose()
-      if (Array.isArray(layer.mesh.material)) {
-        layer.mesh.material.forEach((mat) => mat.dispose())
-      } else {
-        layer.mesh.material.dispose()
-      }
-    })
-    this.layers.clear()
-    this.group.clear()
-  }
+  addLayer!: (config: LayerConfig) => void;
+  removeLayer!: (name: string) => void;
+  getLayer!: (name: string) => THREE.Mesh | undefined;
+  getAllLayers!: () => Map<string, LayerConfig>;
+  getGroup!: () => THREE.Group;
+  update!: (deltaTime: number) => void;
 }

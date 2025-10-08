@@ -1,38 +1,19 @@
-import * as THREE from 'three'
+import * as THREE from 'three';
+import { SceneObject } from './SceneObject';
 
-/**
- * Base component for managing a Three.js mesh
- * Provides basic functionality for any 3D object
- */
-export class MeshComponent {
-  protected mesh: THREE.Mesh
-
+export class MeshComponent extends SceneObject {
   constructor(geometry: THREE.BufferGeometry, material: THREE.Material) {
-    this.mesh = new THREE.Mesh(geometry, material)
-  }
+    super();
 
-  getMesh(): THREE.Mesh {
-    return this.mesh
-  }
+    const m_mesh = new THREE.Mesh(geometry, material);
 
-  setPosition(x: number, y: number, z: number): void {
-    this.mesh.position.set(x, y, z)
-  }
+    this.setObject3D(m_mesh);
 
-  setScale(scale: number): void {
-    this.mesh.scale.setScalar(scale)
-  }
-
-  setName(name: string): void {
-    this.mesh.name = name
-  }
-
-  dispose(): void {
-    this.mesh.geometry.dispose()
-    if (Array.isArray(this.mesh.material)) {
-      this.mesh.material.forEach((mat) => mat.dispose())
-    } else {
-      this.mesh.material.dispose()
+    this.getMesh = getMesh;
+    function getMesh(): THREE.Mesh {
+      return m_mesh;
     }
   }
+
+  getMesh!: () => THREE.Mesh;
 }
