@@ -1,7 +1,8 @@
 import * as THREE from 'three'
 
 const createCamera = () => {
-  const w = window.innerWidth - 400 // Sidebar width
+  const sidebarWidth = window.innerWidth > 768 ? 400 : 0
+  const w = window.innerWidth - sidebarWidth
   const h = window.innerHeight
   const fov = 75
   const aspect = w / h

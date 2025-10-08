@@ -58,3 +58,25 @@ window.addEventListener('click', (event: MouseEvent) => {
     previewScene
   )
 })
+
+window.addEventListener('touchend', (event: TouchEvent) => {
+  if (event.changedTouches.length > 0) {
+    const touch = event.changedTouches[0]
+    checkIntersection(
+      touch.clientX,
+      touch.clientY,
+      raycaster,
+      sceneManager.getCamera(),
+      sceneManager.getScene(),
+      sceneManager.getControls(),
+      previewScene
+    )
+  }
+})
+
+const sidebarToggle = document.getElementById('sidebar-toggle')
+const sidebar = document.getElementById('sidebar')
+
+sidebarToggle?.addEventListener('click', () => {
+  sidebar?.classList.toggle('sidebar-open')
+})

@@ -15,8 +15,8 @@ function checkIntersection(
   const previewContainer = document.getElementById('preview-container')
 
   // Actualizar las coordenadas del mouse
-  // Ajustar x para el canvas (después del sidebar de 400px)
-  const sidebarWidth = 400
+  // Ajustar x para el canvas (después del sidebar en desktop, 0 en mobile)
+  const sidebarWidth = window.innerWidth > 768 ? 400 : 0
   const canvasWidth = window.innerWidth - sidebarWidth
   const mouse = new THREE.Vector2()
   mouse.x = ((x - sidebarWidth) / canvasWidth) * 2 - 1
@@ -50,6 +50,9 @@ function checkIntersection(
         } else if (obj.object.name === 'satelliteMesh') {
           templateId = 'satellite-info'
           cameraOffset = { x: 5, y: 2, z: 5 }
+        } else if (obj.object.name === 'skullMesh') {
+          templateId = 'skull-info'
+          cameraOffset = { x: 8, y: 3, z: 8 }
         }
 
         if (templateId) {

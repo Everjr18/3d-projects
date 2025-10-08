@@ -150,6 +150,46 @@ class PreviewScene {
         this.camera.position.z = 5
         return // Early return since loading is async
 
+      case 'skullMesh':
+        // Load actual skull model
+        const skullObjLoader = new OBJLoader()
+        const skullMtlLoader = new MTLLoader()
+        skullMtlLoader.load('/obj/12140_Skull_v3_L2.mtl', (mtl) => {
+          mtl.preload()
+          for (const material of Object.values(mtl.materials)) {
+            material.side = THREE.DoubleSide
+          }
+          skullObjLoader.setMaterials(mtl)
+          skullObjLoader.load('/obj/12140_Skull_v3_L2.obj', (root) => {
+            root.scale.set(0.1, 0.1, 0.1)
+            root.rotation.x = -Math.PI / 2
+
+            // Calculate center
+            const box = new THREE.Box3().setFromObject(root)
+            const center = box.getCenter(new THREE.Vector3())
+
+            // Create a group to act as the new pivot point
+            const pivotGroup = new THREE.Group()
+
+            // Offset the model so it rotates around its center
+            root.position.set(-center.x, -center.y, -center.z)
+
+            // Add model to pivot group
+            pivotGroup.add(root)
+
+            if (this.currentObject) {
+              this.scene.remove(this.currentObject)
+            }
+            this.currentObject = pivotGroup
+            this.scene.add(pivotGroup)
+            this.startAnimation()
+          })
+        })
+
+        // Move camera back for skull
+        this.camera.position.z = 6
+        return // Early return since loading is async
+
       default:
         return
     }

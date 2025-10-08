@@ -131,6 +131,32 @@ export class SceneManager {
         console.error('Error loading satellite:', error)
       })
 
+      const skullComponent = new ModelLoaderComponent()
+      skullComponent.load({
+        objPath: CELESTIAL_OBJECTS.SKULL.model.obj,
+        mtlPath: CELESTIAL_OBJECTS.SKULL.model.mtl,
+        position: CELESTIAL_OBJECTS.SKULL.position,
+        scale: CELESTIAL_OBJECTS.SKULL.scale,
+        rotation: CELESTIAL_OBJECTS.SKULL.rotation,
+        meshName: CELESTIAL_OBJECTS.SKULL.name,
+      }).then(() => {
+        skullComponent.addToScene(m_scene)
+
+        const skullLight = new THREE.PointLight(
+          CELESTIAL_OBJECTS.SKULL.light.color,
+          CELESTIAL_OBJECTS.SKULL.light.intensity,
+          CELESTIAL_OBJECTS.SKULL.light.distance
+        )
+        skullLight.position.set(
+          CELESTIAL_OBJECTS.SKULL.position.x,
+          CELESTIAL_OBJECTS.SKULL.position.y + 2,
+          CELESTIAL_OBJECTS.SKULL.position.z
+        )
+        m_scene.add(skullLight)
+      }).catch((error) => {
+        console.error('Error loading skull:', error)
+      })
+
       const moonGeometry = new THREE.IcosahedronGeometry(GEOMETRY.SPHERE.radius, GEOMETRY.SPHERE.detail)
       const moonMaterial = new THREE.MeshPhongMaterial({
         map: loader.load(CELESTIAL_OBJECTS.MOON.textures.map),
@@ -148,7 +174,8 @@ export class SceneManager {
     }
 
     function handleResize() {
-      const w = window.innerWidth - SIDEBAR_WIDTH
+      const sidebarWidth = window.innerWidth > 768 ? SIDEBAR_WIDTH : 0
+      const w = window.innerWidth - sidebarWidth
       m_camera.aspect = w / window.innerHeight
       m_camera.updateProjectionMatrix()
       m_renderer.setSize(w, window.innerHeight)

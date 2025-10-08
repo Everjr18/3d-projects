@@ -66,6 +66,21 @@ export const CELESTIAL_OBJECTS = {
       mtl: '/obj/Satelite.mtl',
     },
   },
+  SKULL: {
+    name: 'skullMesh',
+    position: { x: -15, y: 0, z: 0 },
+    scale: 0.05,
+    rotation: { x: -Math.PI / 2, y: 0, z: 0 },
+    model: {
+      obj: '/obj/12140_Skull_v3_L2.obj',
+      mtl: '/obj/12140_Skull_v3_L2.mtl',
+    },
+    light: {
+      color: 0xffffff,
+      intensity: 3,
+      distance: 10,
+    },
+  },
   STARFIELD: {
     numStars: 2000,
     radius: { min: 100, max: 125 },

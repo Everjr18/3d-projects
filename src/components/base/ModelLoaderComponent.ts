@@ -56,8 +56,13 @@ export class ModelLoaderComponent extends SceneObject {
                   root.rotation.set(config.rotation.x, config.rotation.y, config.rotation.z)
                 }
 
-                if (config.meshName && root.children[0]) {
-                  root.children[0].name = config.meshName
+                if (config.meshName) {
+                  root.name = config.meshName
+                  root.traverse((child) => {
+                    if (child instanceof THREE.Mesh) {
+                      child.name = config.meshName
+                    }
+                  })
                 }
 
                 m_group.add(root)
