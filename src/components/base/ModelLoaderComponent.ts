@@ -59,7 +59,7 @@ export class ModelLoaderComponent extends SceneObject {
                 if (config.meshName) {
                   root.name = config.meshName
                   root.traverse((child) => {
-                    if (child instanceof THREE.Mesh) {
+                    if (child instanceof THREE.Mesh && config.meshName) {
                       child.name = config.meshName
                     }
                   })
