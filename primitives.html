@@ -7,37 +7,44 @@
     <title>Primitivas 3D - Three.js</title>
   </head>
   <body class="font-mono text-sm flex">
-    <!-- Toggle Button -->
-    <button id="sidebar-toggle" class="btn btn-circle btn-primary fixed top-4 left-4 z-50 md:hidden">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-      </svg>
-    </button>
-
     <!-- Sidebar -->
     <aside id="sidebar" class="h-screen bg-base-200 overflow-y-auto" style="width: 400px; flex-shrink: 0;">
       <div class="p-6 space-y-4">
         <a href="/" class="btn btn-sm btn-ghost mb-2">← Inicio</a>
-        <h1 class="text-2xl font-bold">Primitivas 3D</h1>
-        <p class="text-sm">Formas geométricas básicas. Haz clic en los objetos para verlos en detalle.</p>
 
-        <div class="divider my-2"></div>
+        <div style="display: flex; flex-direction: column; gap: 1rem; padding: 0 1rem;">
+          <!-- Toggle Button (flotante a la derecha) -->
+          <div style="display: flex; justify-content: flex-end;">
+            <button id="sidebar-toggle" class="md:hidden" style="background: rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" style="width: 24px; height: 24px; stroke: white; stroke-width: 2;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+            </button>
+          </div>
 
-        <!-- Preview Canvas -->
-        <div id="preview-container" class="hidden mb-4">
-          <canvas id="preview-canvas" class="w-full bg-black rounded-lg" style="height: 250px;"></canvas>
-        </div>
+          <!-- Title and Description -->
+          <div>
+            <h1 class="text-2xl font-bold">Primitivas 3D</h1>
+            <p class="text-sm">Formas geométricas básicas. Haz clic en los objetos para verlos en detalle.</p>
+          </div>
 
-        <!-- Info Container -->
-        <div id="info-container" class="mb-4">
-          <p class="text-xs text-base-content/60">Selecciona un objeto para ver más información...</p>
-        </div>
+          <div class="divider my-0"></div>
 
-        <div class="divider my-2"></div>
+          <!-- Preview Canvas -->
+          <div id="preview-container" class="hidden">
+            <canvas id="preview-canvas" class="w-full bg-black rounded-lg" style="height: 250px;"></canvas>
+          </div>
 
-        <!-- Controls -->
-        <div class="space-y-4">
-          <h3 class="text-sm font-bold">Controles</h3>
+          <!-- Info Container -->
+          <div id="info-container">
+            <p class="text-xs text-base-content/60">Selecciona un objeto para ver más información...</p>
+          </div>
+
+          <div class="divider my-0"></div>
+
+          <!-- Controls -->
+          <div class="space-y-4">
+            <h3 class="text-sm font-bold">Controles</h3>
 
           <div class="form-control">
             <label class="label">
@@ -93,9 +100,9 @@
               <span class="label-text text-xs">Auto-rotación cámara</span>
             </label>
           </div>
+          </div>
         </div>
       </div>
-    </div>
     </aside>
 
     <!-- Canvas Container -->
