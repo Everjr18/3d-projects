@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="forest">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="public/css/style.css" />
+    <title>Primitivas 3D - Three.js</title>
+  </head>
+  <body class="font-mono text-sm flex">
+    <!-- Toggle Button -->
+    <button id="sidebar-toggle" class="btn btn-circle btn-primary fixed top-4 left-4 z-50 md:hidden">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="h-screen bg-base-200 overflow-y-auto" style="width: 400px; flex-shrink: 0;">
+      <div class="p-6 space-y-4">
+        <a href="/" class="btn btn-sm btn-ghost mb-2">← Inicio</a>
+        <h1 class="text-2xl font-bold">Primitivas 3D</h1>
+        <p class="text-sm">Formas geométricas básicas. Haz clic en los objetos para verlos en detalle.</p>
+
+        <div class="divider my-2"></div>
+
+        <!-- Preview Canvas -->
+        <div id="preview-container" class="hidden mb-4">
+          <canvas id="preview-canvas" class="w-full bg-black rounded-lg" style="height: 250px;"></canvas>
+        </div>
+
+        <!-- Info Container -->
+        <div id="info-container" class="mb-4">
+          <p class="text-xs text-base-content/60">Selecciona un objeto para ver más información...</p>
+        </div>
+
+        <div class="divider my-2"></div>
+
+        <!-- Controls -->
+        <div class="space-y-4">
+          <h3 class="text-sm font-bold">Controles</h3>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text text-xs">Brillo</span>
+              <span class="label-text-alt text-xs" id="brightness-value">1.0</span>
+            </label>
+            <input type="range" min="0" max="2" step="0.1" value="1.0" class="range range-xs range-primary" id="brightness-slider" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text text-xs">Velocidad de rotación</span>
+              <span class="label-text-alt text-xs" id="speed-value">1.0x</span>
+            </label>
+            <input type="range" min="0" max="3" step="0.1" value="1.0" class="range range-xs range-primary" id="speed-slider" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text text-xs">Campo de visión</span>
+              <span class="label-text-alt text-xs" id="fov-value">75°</span>
+            </label>
+            <input type="range" min="50" max="120" step="5" value="75" class="range range-xs range-primary" id="fov-slider" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text text-xs">Intensidad luz ambiental</span>
+              <span class="label-text-alt text-xs" id="ambient-value">0.3</span>
+            </label>
+            <input type="range" min="0" max="1" step="0.05" value="0.3" class="range range-xs range-secondary" id="ambient-slider" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text text-xs">Intensidad luz direccional</span>
+              <span class="label-text-alt text-xs" id="directional-value">2.0</span>
+            </label>
+            <input type="range" min="0" max="5" step="0.1" value="2.0" class="range range-xs range-secondary" id="directional-slider" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text text-xs">Velocidad estrellas</span>
+              <span class="label-text-alt text-xs" id="stars-value">1.0x</span>
+            </label>
+            <input type="range" min="0" max="5" step="0.1" value="1.0" class="range range-xs range-accent" id="stars-slider" />
+          </div>
+
+          <div class="form-control">
+            <label class="label cursor-pointer justify-start gap-2">
+              <input type="checkbox" checked class="checkbox checkbox-xs checkbox-primary" id="auto-rotate-checkbox" />
+              <span class="label-text text-xs">Auto-rotación cámara</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    </aside>
+
+    <!-- Canvas Container -->
+    <div id="canvas-container" class="h-screen relative" style="flex: 1;"></div>
+
+    <!-- Hidden templates for primitive info -->
+    <template id="cubeMesh-info">
+      <h3 class="text-lg font-bold mb-2">📦 Cubo</h3>
+      <div class="space-y-2 text-sm">
+        <p>Un cubo es un hexaedro regular con seis caras cuadradas iguales.</p>
+        <p>Todas sus aristas tienen la misma longitud y todos sus ángulos son rectos.</p>
+        <p>En Three.js se crea usando BoxGeometry.</p>
+      </div>
+    </template>
+
+    <template id="cylinderMesh-info">
+      <h3 class="text-lg font-bold mb-2">🥫 Cilindro</h3>
+      <div class="space-y-2 text-sm">
+        <p>Un cilindro es un sólido geométrico con dos bases circulares paralelas.</p>
+        <p>Las bases están conectadas por una superficie curva perpendicular a ellas.</p>
+        <p>En Three.js se crea usando CylinderGeometry.</p>
+      </div>
+    </template>
+
+    <script type="module" src="/public/js/primitives.ts"></script>
+  </body>
+</html>

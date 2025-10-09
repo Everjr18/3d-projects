@@ -89,6 +89,20 @@ export const CELESTIAL_OBJECTS = {
     saturation: 0.2,
     texture: '/img/circle.png',
   },
+  CUBE: {
+    name: 'cubeMesh',
+    position: { x: -3, y: 0, z: 0 },
+    scale: 1.5,
+    color: 0x00ffff,
+  },
+  CYLINDER: {
+    name: 'cylinderMesh',
+    position: { x: 3, y: 0, z: 0 },
+    radiusTop: 0.8,
+    radiusBottom: 0.8,
+    height: 2.5,
+    color: 0xff00ff,
+  },
 }
 
 export const LIGHTS = {

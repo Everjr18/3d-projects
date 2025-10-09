@@ -190,6 +190,30 @@ class PreviewScene {
         this.camera.position.z = 6
         return // Early return since loading is async
 
+      case 'cubeMesh':
+        const cubeGeometry = new THREE.BoxGeometry(1.5, 1.5, 1.5)
+        const cubeMaterial = new THREE.MeshStandardMaterial({
+          color: 0x00ffff,
+          metalness: 0.3,
+          roughness: 0.4,
+        })
+        mesh = new THREE.Mesh(cubeGeometry, cubeMaterial)
+        this.currentObject = mesh
+        this.camera.position.z = 3
+        break
+
+      case 'cylinderMesh':
+        const cylinderGeometry = new THREE.CylinderGeometry(0.8, 0.8, 2.5, 32)
+        const cylinderMaterial = new THREE.MeshStandardMaterial({
+          color: 0xff00ff,
+          metalness: 0.3,
+          roughness: 0.4,
+        })
+        mesh = new THREE.Mesh(cylinderGeometry, cylinderMaterial)
+        this.currentObject = mesh
+        this.camera.position.z = 4
+        break
+
       default:
         return
     }

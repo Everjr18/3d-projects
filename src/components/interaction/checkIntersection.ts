@@ -53,6 +53,12 @@ function checkIntersection(
         } else if (obj.object.name === 'skullMesh') {
           templateId = 'skull-info'
           cameraOffset = { x: 8, y: 3, z: 8 }
+        } else if (obj.object.name === 'cubeMesh') {
+          templateId = 'cubeMesh-info'
+          cameraOffset = { x: 4, y: 2, z: 4 }
+        } else if (obj.object.name === 'cylinderMesh') {
+          templateId = 'cylinderMesh-info'
+          cameraOffset = { x: 5, y: 2, z: 5 }
         }
 
         if (templateId) {

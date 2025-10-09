@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="forest">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <link rel="icon" type="image/svg+xml" href="/earth.svg" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="public/css/style.css" />
+    <title>Sistema Solar - Three.js</title>
+  </head>
+  <body class="font-mono text-sm flex">
+    <!-- Toggle Button -->
+    <button id="sidebar-toggle" class="btn btn-circle btn-primary fixed top-4 left-4 z-50 md:hidden">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="h-screen bg-base-200 overflow-y-auto" style="width: 400px; flex-shrink: 0;">
+      <div class="p-6 space-y-4">
+        <a href="/" class="btn btn-sm btn-ghost mb-2">← Inicio</a>
+        <h1 class="text-2xl font-bold">El Sistema Solar</h1>
+        <p class="text-sm">Explora nuestro sistema solar interactivo. Haz clic en los objetos celestes para obtener más información.</p>
+
+        <div class="divider my-2"></div>
+
+        <!-- Preview Canvas -->
+        <div id="preview-container" class="hidden mb-4">
+          <canvas id="preview-canvas" class="w-full bg-black rounded-lg" style="height: 250px;"></canvas>
+        </div>
+
+        <!-- Info Container -->
+        <div id="info-container" class="mb-4">
+          <p class="text-xs text-base-content/60">Selecciona un objeto para ver más información...</p>
+        </div>
+
+        <div class="divider my-2"></div>
+
+        <!-- Controls -->
+        <div class="space-y-4">
+          <h3 class="text-sm font-bold">Controles</h3>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text text-xs">Brillo</span>
+              <span class="label-text-alt text-xs" id="brightness-value">1.0</span>
+            </label>
+            <input type="range" min="0" max="2" step="0.1" value="1.0" class="range range-xs range-primary" id="brightness-slider" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text text-xs">Velocidad de rotación</span>
+              <span class="label-text-alt text-xs" id="speed-value">1.0x</span>
+            </label>
+            <input type="range" min="0" max="3" step="0.1" value="1.0" class="range range-xs range-primary" id="speed-slider" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text text-xs">Campo de visión</span>
+              <span class="label-text-alt text-xs" id="fov-value">75°</span>
+            </label>
+            <input type="range" min="50" max="120" step="5" value="75" class="range range-xs range-primary" id="fov-slider" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text text-xs">Intensidad luz ambiental</span>
+              <span class="label-text-alt text-xs" id="ambient-value">0.3</span>
+            </label>
+            <input type="range" min="0" max="1" step="0.05" value="0.3" class="range range-xs range-secondary" id="ambient-slider" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text text-xs">Intensidad luz direccional</span>
+              <span class="label-text-alt text-xs" id="directional-value">2.0</span>
+            </label>
+            <input type="range" min="0" max="5" step="0.1" value="2.0" class="range range-xs range-secondary" id="directional-slider" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text text-xs">Opacidad nubes</span>
+              <span class="label-text-alt text-xs" id="clouds-value">0.8</span>
+            </label>
+            <input type="range" min="0" max="1" step="0.05" value="0.8" class="range range-xs range-accent" id="clouds-slider" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text text-xs">Velocidad estrellas</span>
+              <span class="label-text-alt text-xs" id="stars-value">1.0x</span>
+            </label>
+            <input type="range" min="0" max="5" step="0.1" value="1.0" class="range range-xs range-accent" id="stars-slider" />
+          </div>
+
+          <div class="form-control">
+            <label class="label cursor-pointer justify-start gap-2">
+              <input type="checkbox" checked class="checkbox checkbox-xs checkbox-primary" id="auto-rotate-checkbox" />
+              <span class="label-text text-xs">Auto-rotación cámara</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    </aside>
+
+    <!-- Canvas Container -->
+    <div id="canvas-container" class="h-screen relative" style="flex: 1;">
+    </div>
+    <!-- Hidden templates for celestial object info -->
+    <template id="earth-info">
+      <h3 class="text-lg font-bold mb-2">🌍 La Tierra</h3>
+      <div class="space-y-2 text-sm">
+        <p>La Tierra es el tercer planeta del sistema solar en orden de distancia al Sol.</p>
+        <p>Aproximadamente el 71% de su superficie está cubierta de agua.</p>
+        <p>Tiene un diámetro de unos 12,742 kilómetros.</p>
+        <p>La atmósfera de la Tierra está compuesta mayoritariamente de nitrógeno y oxígeno.</p>
+        <p>La Tierra es el único planeta conocido que alberga vida.</p>
+      </div>
+    </template>
+
+    <template id="moon-info">
+      <h3 class="text-lg font-bold mb-2">🌙 La Luna</h3>
+      <div class="space-y-2 text-sm">
+        <p>La Luna es el único satélite natural de la Tierra y el quinto satélite más grande del sistema solar.</p>
+        <p>Tiene un diámetro de aproximadamente 3,474 kilómetros.</p>
+        <p>La Luna no tiene atmósfera significativa, lo que provoca temperaturas extremas en su superficie.</p>
+        <p>Su gravedad es aproximadamente una sexta parte de la de la Tierra.</p>
+        <p>Las fases de la Luna son causadas por su posición relativa al Sol y la Tierra.</p>
+      </div>
+    </template>
+
+    <template id="satellite-info">
+      <h3 class="text-lg font-bold mb-2">🛰️ Satélite</h3>
+      <div class="space-y-2 text-sm">
+        <p>Un satélite es un objeto que orbita un planeta u otro cuerpo celestial.</p>
+        <p>Los satélites pueden ser naturales, como la Luna, o artificiales, construidos por el ser humano.</p>
+        <p>Los satélites artificiales se utilizan para telecomunicaciones, monitoreo climático y exploración espacial.</p>
+        <p>Algunos satélites están en órbita baja de la Tierra, mientras que otros están a mayor distancia.</p>
+        <p>Las órbitas de los satélites son cuidadosamente calculadas para evitar colisiones y maximizar su funcionalidad.</p>
+      </div>
+    </template>
+
+    <template id="sun-info">
+      <h3 class="text-lg font-bold mb-2">☀️ El Sol</h3>
+      <div class="space-y-2 text-sm">
+        <p>El Sol es la estrella en el centro del sistema solar y la principal fuente de energía para la Tierra.</p>
+        <p>Tiene un diámetro de aproximadamente 1,39 millones de kilómetros, lo que lo convierte en el objeto más grande del sistema solar.</p>
+        <p>El Sol está compuesto principalmente de hidrógeno y helio, que se fusionan en su núcleo generando energía.</p>
+        <p>La luz del Sol tarda alrededor de 8 minutos y 20 segundos en llegar a la Tierra.</p>
+        <p>Las erupciones solares y las manchas solares son fenómenos que ocurren en la superficie del Sol.</p>
+      </div>
+    </template>
+
+    <script type="module" src="/public/js/solar-system.ts"></script>
+  </body>
+</html>
