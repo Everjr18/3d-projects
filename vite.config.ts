@@ -14,6 +14,7 @@ export default defineConfig({
         solarSystem: resolve(__dirname, 'solar-system.html'),
         primitives: resolve(__dirname, 'primitives.html'),
         objects3d: resolve(__dirname, 'objects-3d.html'),
+        minecraftSkin: resolve(__dirname, 'minecraft-skin.html'),
       },
     },
   },
