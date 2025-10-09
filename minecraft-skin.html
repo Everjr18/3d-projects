@@ -32,47 +32,10 @@
 
         <div class="divider my-2"></div>
 
-        <!-- Color Controls -->
+        <!-- Overlay Layers -->
         <div class="space-y-4">
-          <h3 class="text-sm font-bold">Colores del Skin</h3>
-
-          <!-- Head -->
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text text-xs">🧑 Cabeza</span>
-            </label>
-            <input type="color" value="#ffdbac" class="w-full h-10 rounded cursor-pointer" id="head-color" />
-          </div>
-
-          <!-- Body -->
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text text-xs">👕 Cuerpo</span>
-            </label>
-            <input type="color" value="#4a90e2" class="w-full h-10 rounded cursor-pointer" id="body-color" />
-          </div>
-
-          <!-- Arms -->
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text text-xs">💪 Brazos</span>
-            </label>
-            <input type="color" value="#ffdbac" class="w-full h-10 rounded cursor-pointer" id="arms-color" />
-          </div>
-
-          <!-- Legs -->
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text text-xs">👖 Piernas</span>
-            </label>
-            <input type="color" value="#2c5aa0" class="w-full h-10 rounded cursor-pointer" id="legs-color" />
-          </div>
-
-          <div class="divider my-2"></div>
-
-          <!-- Overlay Layers -->
           <h3 class="text-sm font-bold">Capas Overlay (Segunda Capa)</h3>
-          <p class="text-xs text-base-content/60 mb-2">Las capas overlay se superponen sobre la base</p>
+          <p class="text-xs text-base-content/60 mb-2">Las capas overlay se superponen sobre la base. Usa los checkboxes para mostrar u ocultar cada capa.</p>
 
           <!-- Head Overlay -->
           <div class="form-control">
@@ -80,7 +43,6 @@
               <input type="checkbox" class="checkbox checkbox-xs checkbox-primary" id="head-overlay-enabled" />
               <span class="label-text text-xs">🎩 Sombrero/Casco</span>
             </label>
-            <input type="color" value="#ff0000" class="w-full h-10 rounded cursor-pointer mt-1" id="head-overlay-color" disabled />
           </div>
 
           <!-- Body Overlay -->
@@ -89,7 +51,6 @@
               <input type="checkbox" class="checkbox checkbox-xs checkbox-primary" id="body-overlay-enabled" />
               <span class="label-text text-xs">🧥 Chaqueta</span>
             </label>
-            <input type="color" value="#00ff00" class="w-full h-10 rounded cursor-pointer mt-1" id="body-overlay-color" disabled />
           </div>
 
           <!-- Arms Overlay -->
@@ -98,7 +59,6 @@
               <input type="checkbox" class="checkbox checkbox-xs checkbox-primary" id="arms-overlay-enabled" />
               <span class="label-text text-xs">👔 Mangas</span>
             </label>
-            <input type="color" value="#0000ff" class="w-full h-10 rounded cursor-pointer mt-1" id="arms-overlay-color" disabled />
           </div>
 
           <!-- Legs Overlay -->
@@ -107,28 +67,24 @@
               <input type="checkbox" class="checkbox checkbox-xs checkbox-primary" id="legs-overlay-enabled" />
               <span class="label-text text-xs">👔 Pantalones Overlay</span>
             </label>
-            <input type="color" value="#ffff00" class="w-full h-10 rounded cursor-pointer mt-1" id="legs-overlay-color" disabled />
           </div>
+        </div>
 
           <div class="divider my-2"></div>
 
-          <!-- Presets -->
-          <h3 class="text-sm font-bold">Presets</h3>
-          <div class="flex flex-wrap gap-2">
-            <button class="btn btn-xs btn-outline" id="preset-steve">Steve</button>
-            <button class="btn btn-xs btn-outline" id="preset-alex">Alex</button>
-            <button class="btn btn-xs btn-outline" id="preset-zombie">Zombie</button>
-            <button class="btn btn-xs btn-outline" id="preset-enderman">Enderman</button>
-          </div>
+          <!-- Import/Export -->
+          <h3 class="text-sm font-bold">Importar/Exportar Skin</h3>
+          <p class="text-xs text-base-content/60 mb-2">Carga o descarga tu skin en formato PNG</p>
 
-          <div class="divider my-2"></div>
-
-          <!-- Export -->
-          <h3 class="text-sm font-bold">Exportar Skin</h3>
-          <p class="text-xs text-base-content/60 mb-2">Descarga tu skin como imagen PNG para usar en Minecraft</p>
-          <button class="btn btn-sm btn-success w-full" id="download-skin">
-            📥 Descargar Skin (64x64)
+          <button class="btn btn-sm btn-primary w-full mb-2" id="import-skin">
+            📁 Importar Skin PNG
           </button>
+
+          <button class="btn btn-sm btn-success w-full" id="download-skin">
+            💾 Exportar Skin (64x64)
+          </button>
+
+          <input type="file" id="skin-file-input" accept="image/png" style="display: none;" />
 
           <div class="divider my-2"></div>
 

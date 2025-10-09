@@ -3,7 +3,7 @@ import * as THREE from 'three'
 interface UIElements {
   renderer: THREE.WebGLRenderer
   camera: THREE.PerspectiveCamera
-  cloudsMesh: THREE.Mesh
+  cloudsMesh?: THREE.Mesh
   sunLight: THREE.DirectionalLight
   ambientLight: THREE.AmbientLight
 }
@@ -75,7 +75,7 @@ export class UIController {
         const target = e.target as HTMLInputElement
         const opacity = parseFloat(target.value)
         if (cloudsValue) cloudsValue.textContent = opacity.toFixed(2)
-        if (elements.cloudsMesh.material instanceof THREE.Material) {
+        if (elements.cloudsMesh && elements.cloudsMesh.material instanceof THREE.Material) {
           elements.cloudsMesh.material.opacity = opacity
         }
       })

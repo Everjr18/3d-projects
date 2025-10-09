@@ -9,30 +9,16 @@ let walkAnimation = true
 let animationSpeed = 1.0
 let animationTime = 0
 
-// Color pickers
-const headColorPicker = document.getElementById('head-color') as HTMLInputElement
-const bodyColorPicker = document.getElementById('body-color') as HTMLInputElement
-const armsColorPicker = document.getElementById('arms-color') as HTMLInputElement
-const legsColorPicker = document.getElementById('legs-color') as HTMLInputElement
-
 // Overlay controls
 const headOverlayEnabled = document.getElementById('head-overlay-enabled') as HTMLInputElement
-const headOverlayColor = document.getElementById('head-overlay-color') as HTMLInputElement
 const bodyOverlayEnabled = document.getElementById('body-overlay-enabled') as HTMLInputElement
-const bodyOverlayColor = document.getElementById('body-overlay-color') as HTMLInputElement
 const armsOverlayEnabled = document.getElementById('arms-overlay-enabled') as HTMLInputElement
-const armsOverlayColor = document.getElementById('arms-overlay-color') as HTMLInputElement
 const legsOverlayEnabled = document.getElementById('legs-overlay-enabled') as HTMLInputElement
-const legsOverlayColor = document.getElementById('legs-overlay-color') as HTMLInputElement
 
-// Preset buttons
-const presetSteve = document.getElementById('preset-steve') as HTMLButtonElement
-const presetAlex = document.getElementById('preset-alex') as HTMLButtonElement
-const presetZombie = document.getElementById('preset-zombie') as HTMLButtonElement
-const presetEnderman = document.getElementById('preset-enderman') as HTMLButtonElement
-
-// Download button
+// Import/Export buttons
+const importSkinButton = document.getElementById('import-skin') as HTMLButtonElement
 const downloadSkinButton = document.getElementById('download-skin') as HTMLButtonElement
+const skinFileInput = document.getElementById('skin-file-input') as HTMLInputElement
 
 // Animation controls
 const walkAnimationCheckbox = document.getElementById('walk-animation') as HTMLInputElement
@@ -50,97 +36,121 @@ const ambientValue = document.getElementById('ambient-value') as HTMLSpanElement
 const directionalSlider = document.getElementById('directional-slider') as HTMLInputElement
 const directionalValue = document.getElementById('directional-value') as HTMLSpanElement
 
-// Color change handlers
-headColorPicker?.addEventListener('input', (e) => {
-  const color = (e.target as HTMLInputElement).value
-  const material = sceneManager.getHeadMesh().material as THREE.MeshLambertMaterial
-  material.color.set(color)
-})
-
-bodyColorPicker?.addEventListener('input', (e) => {
-  const color = (e.target as HTMLInputElement).value
-  const material = sceneManager.getBodyMesh().material as THREE.MeshLambertMaterial
-  material.color.set(color)
-})
-
-armsColorPicker?.addEventListener('input', (e) => {
-  const color = (e.target as HTMLInputElement).value
-  const rightArmMaterial = sceneManager.getRightArmMesh().material as THREE.MeshLambertMaterial
-  const leftArmMaterial = sceneManager.getLeftArmMesh().material as THREE.MeshLambertMaterial
-  rightArmMaterial.color.set(color)
-  leftArmMaterial.color.set(color)
-})
-
-legsColorPicker?.addEventListener('input', (e) => {
-  const color = (e.target as HTMLInputElement).value
-  const rightLegMaterial = sceneManager.getRightLegMesh().material as THREE.MeshLambertMaterial
-  const leftLegMaterial = sceneManager.getLeftLegMesh().material as THREE.MeshLambertMaterial
-  rightLegMaterial.color.set(color)
-  leftLegMaterial.color.set(color)
-})
-
 // Overlay handlers
 headOverlayEnabled?.addEventListener('change', (e) => {
   const enabled = (e.target as HTMLInputElement).checked
   sceneManager.getHeadOverlayMesh().visible = enabled
-  headOverlayColor.disabled = !enabled
-})
-
-headOverlayColor?.addEventListener('input', (e) => {
-  const color = (e.target as HTMLInputElement).value
-  const material = sceneManager.getHeadOverlayMesh().material as THREE.MeshLambertMaterial
-  material.color.set(color)
 })
 
 bodyOverlayEnabled?.addEventListener('change', (e) => {
   const enabled = (e.target as HTMLInputElement).checked
   sceneManager.getBodyOverlayMesh().visible = enabled
-  bodyOverlayColor.disabled = !enabled
-})
-
-bodyOverlayColor?.addEventListener('input', (e) => {
-  const color = (e.target as HTMLInputElement).value
-  const material = sceneManager.getBodyOverlayMesh().material as THREE.MeshLambertMaterial
-  material.color.set(color)
 })
 
 armsOverlayEnabled?.addEventListener('change', (e) => {
   const enabled = (e.target as HTMLInputElement).checked
   sceneManager.getRightArmOverlayMesh().visible = enabled
   sceneManager.getLeftArmOverlayMesh().visible = enabled
-  armsOverlayColor.disabled = !enabled
-})
-
-armsOverlayColor?.addEventListener('input', (e) => {
-  const color = (e.target as HTMLInputElement).value
-  const rightArmMaterial = sceneManager.getRightArmOverlayMesh().material as THREE.MeshLambertMaterial
-  const leftArmMaterial = sceneManager.getLeftArmOverlayMesh().material as THREE.MeshLambertMaterial
-  rightArmMaterial.color.set(color)
-  leftArmMaterial.color.set(color)
 })
 
 legsOverlayEnabled?.addEventListener('change', (e) => {
   const enabled = (e.target as HTMLInputElement).checked
   sceneManager.getRightLegOverlayMesh().visible = enabled
   sceneManager.getLeftLegOverlayMesh().visible = enabled
-  legsOverlayColor.disabled = !enabled
 })
 
-legsOverlayColor?.addEventListener('input', (e) => {
-  const color = (e.target as HTMLInputElement).value
-  const rightLegMaterial = sceneManager.getRightLegOverlayMesh().material as THREE.MeshLambertMaterial
-  const leftLegMaterial = sceneManager.getLeftLegOverlayMesh().material as THREE.MeshLambertMaterial
-  rightLegMaterial.color.set(color)
-  leftLegMaterial.color.set(color)
+downloadSkinButton?.addEventListener('click', () => {
+  // Get the current texture from localStorage or generate from current model
+  const dataURL = localStorage.getItem(SKIN_STORAGE_KEY)
+
+  if (!dataURL) {
+    alert('No hay skin para exportar. Por favor importa una skin primero.')
+    return
+  }
+
+  // Better filename with timestamp
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5)
+  const filename = `minecraft-skin-${timestamp}.png`
+
+  // Convert dataURL to blob and download
+  fetch(dataURL)
+    .then(res => res.blob())
+    .then(blob => {
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.download = filename
+      link.href = url
+      link.click()
+      URL.revokeObjectURL(url)
+
+      console.log(`Skin exported as ${filename}`)
+    })
+    .catch(error => {
+      console.error('Failed to export skin:', error)
+      alert('Error al exportar skin')
+    })
 })
 
-// Preset handlers
-function applyPreset(head: string, body: string, arms: string, legs: string) {
-  headColorPicker.value = head
-  bodyColorPicker.value = body
-  armsColorPicker.value = arms
-  legsColorPicker.value = legs
+// Import skin from PNG file
+importSkinButton?.addEventListener('click', () => {
+  skinFileInput.click()
+})
 
+skinFileInput?.addEventListener('change', (e) => {
+  const file = (e.target as HTMLInputElement).files?.[0]
+  if (!file) return
+
+  const reader = new FileReader()
+  reader.onload = (event) => {
+    const img = new Image()
+    img.onload = () => {
+      // Validate image dimensions
+      if (img.width !== 64 || (img.height !== 64 && img.height !== 32)) {
+        alert('Invalid skin dimensions. Must be 64x64 or 64x32 pixels.')
+        return
+      }
+
+      // Create a canvas to read pixel data
+      const canvas = document.createElement('canvas')
+      canvas.width = 64
+      canvas.height = 64
+      const ctx = canvas.getContext('2d')!
+
+      // If it's 64x32, convert to 64x64 (old format)
+      if (img.height === 32) {
+        ctx.drawImage(img, 0, 0)
+        // Mirror right leg to left leg
+        ctx.drawImage(canvas, 0, 16, 16, 16, 16, 48, 16, 16)
+        // Mirror right arm to left arm
+        ctx.drawImage(canvas, 40, 16, 16, 16, 32, 48, 16, 16)
+      } else {
+        ctx.drawImage(img, 0, 0)
+      }
+
+      // Apply texture to model
+      applyTextureToModel(canvas)
+
+      // Save to localStorage
+      saveSkinToLocalStorage(canvas)
+
+      console.log('Skin imported successfully and saved to localStorage!')
+    }
+
+    img.src = event.target?.result as string
+  }
+
+  reader.readAsDataURL(file)
+})
+
+// Function to apply texture canvas to 3D model
+function applyTextureToModel(canvas: HTMLCanvasElement) {
+  const texture = new THREE.CanvasTexture(canvas)
+  texture.magFilter = THREE.NearestFilter
+  texture.minFilter = THREE.NearestFilter
+  texture.wrapS = THREE.ClampToEdgeWrapping
+  texture.wrapT = THREE.ClampToEdgeWrapping
+
+  // Apply to all parts of the model
   const headMaterial = sceneManager.getHeadMesh().material as THREE.MeshLambertMaterial
   const bodyMaterial = sceneManager.getBodyMesh().material as THREE.MeshLambertMaterial
   const rightArmMaterial = sceneManager.getRightArmMesh().material as THREE.MeshLambertMaterial
@@ -148,282 +158,42 @@ function applyPreset(head: string, body: string, arms: string, legs: string) {
   const rightLegMaterial = sceneManager.getRightLegMesh().material as THREE.MeshLambertMaterial
   const leftLegMaterial = sceneManager.getLeftLegMesh().material as THREE.MeshLambertMaterial
 
-  headMaterial.color.set(head)
-  bodyMaterial.color.set(body)
-  rightArmMaterial.color.set(arms)
-  leftArmMaterial.color.set(arms)
-  rightLegMaterial.color.set(legs)
-  leftLegMaterial.color.set(legs)
+  headMaterial.map = texture
+  bodyMaterial.map = texture
+  rightArmMaterial.map = texture
+  leftArmMaterial.map = texture
+  rightLegMaterial.map = texture
+  leftLegMaterial.map = texture
+
+  headMaterial.needsUpdate = true
+  bodyMaterial.needsUpdate = true
+  rightArmMaterial.needsUpdate = true
+  leftArmMaterial.needsUpdate = true
+  rightLegMaterial.needsUpdate = true
+  leftLegMaterial.needsUpdate = true
+
+  // Also apply to overlays
+  const headOverlayMaterial = sceneManager.getHeadOverlayMesh().material as THREE.MeshLambertMaterial
+  const bodyOverlayMaterial = sceneManager.getBodyOverlayMesh().material as THREE.MeshLambertMaterial
+  const rightArmOverlayMaterial = sceneManager.getRightArmOverlayMesh().material as THREE.MeshLambertMaterial
+  const leftArmOverlayMaterial = sceneManager.getLeftArmOverlayMesh().material as THREE.MeshLambertMaterial
+  const rightLegOverlayMaterial = sceneManager.getRightLegOverlayMesh().material as THREE.MeshLambertMaterial
+  const leftLegOverlayMaterial = sceneManager.getLeftLegOverlayMesh().material as THREE.MeshLambertMaterial
+
+  headOverlayMaterial.map = texture
+  bodyOverlayMaterial.map = texture
+  rightArmOverlayMaterial.map = texture
+  leftArmOverlayMaterial.map = texture
+  rightLegOverlayMaterial.map = texture
+  leftLegOverlayMaterial.map = texture
+
+  headOverlayMaterial.needsUpdate = true
+  bodyOverlayMaterial.needsUpdate = true
+  rightArmOverlayMaterial.needsUpdate = true
+  leftArmOverlayMaterial.needsUpdate = true
+  rightLegOverlayMaterial.needsUpdate = true
+  leftLegOverlayMaterial.needsUpdate = true
 }
-
-presetSteve?.addEventListener('click', () => {
-  applyPreset('#ffdbac', '#4a90e2', '#ffdbac', '#2c5aa0')
-})
-
-presetAlex?.addEventListener('click', () => {
-  applyPreset('#f4c8a0', '#e35d5d', '#f4c8a0', '#6b4e3d')
-})
-
-presetZombie?.addEventListener('click', () => {
-  applyPreset('#7fa95f', '#4a7c59', '#7fa95f', '#3d5a45')
-})
-
-presetEnderman?.addEventListener('click', () => {
-  applyPreset('#161616', '#000000', '#161616', '#000000')
-})
-
-// Skin export function - Minecraft 1.8+ format (64x64 with overlay layers)
-function generateSkinTexture(): HTMLCanvasElement {
-  const canvas = document.createElement('canvas')
-  canvas.width = 64
-  canvas.height = 64
-  const ctx = canvas.getContext('2d')!
-
-  // Get colors from materials
-  const headMaterial = sceneManager.getHeadMesh().material as THREE.MeshLambertMaterial
-  const bodyMaterial = sceneManager.getBodyMesh().material as THREE.MeshLambertMaterial
-  const armMaterial = sceneManager.getRightArmMesh().material as THREE.MeshLambertMaterial
-  const legMaterial = sceneManager.getRightLegMesh().material as THREE.MeshLambertMaterial
-
-  const headColor = `#${headMaterial.color.getHexString()}`
-  const bodyColor = `#${bodyMaterial.color.getHexString()}`
-  const armColor = `#${armMaterial.color.getHexString()}`
-  const legColor = `#${legMaterial.color.getHexString()}`
-
-  // Fill with transparent background
-  ctx.clearRect(0, 0, 64, 64)
-
-  // ============================================
-  // BASE LAYER (Left half - pixels 0-31)
-  // ============================================
-
-  // HEAD - Base Layer (8x8x8)
-  ctx.fillStyle = headColor
-  // Top
-  ctx.fillRect(8, 0, 8, 8)
-  // Bottom
-  ctx.fillRect(16, 0, 8, 8)
-  // Right
-  ctx.fillRect(0, 8, 8, 8)
-  // Front
-  ctx.fillRect(8, 8, 8, 8)
-  // Left
-  ctx.fillRect(16, 8, 8, 8)
-  // Back
-  ctx.fillRect(24, 8, 8, 8)
-
-  // RIGHT LEG - Base Layer (4x12x4)
-  ctx.fillStyle = legColor
-  // Top
-  ctx.fillRect(4, 16, 4, 4)
-  // Bottom
-  ctx.fillRect(8, 16, 4, 4)
-  // Right
-  ctx.fillRect(0, 20, 4, 12)
-  // Front
-  ctx.fillRect(4, 20, 4, 12)
-  // Left
-  ctx.fillRect(8, 20, 4, 12)
-  // Back
-  ctx.fillRect(12, 20, 4, 12)
-
-  // BODY - Base Layer (8x12x4)
-  ctx.fillStyle = bodyColor
-  // Top
-  ctx.fillRect(20, 16, 8, 4)
-  // Bottom
-  ctx.fillRect(28, 16, 8, 4)
-  // Right
-  ctx.fillRect(16, 20, 4, 12)
-  // Front
-  ctx.fillRect(20, 20, 8, 12)
-  // Left
-  ctx.fillRect(28, 20, 4, 12)
-  // Back
-  ctx.fillRect(32, 20, 8, 12)
-
-  // RIGHT ARM - Base Layer (4x12x4)
-  ctx.fillStyle = armColor
-  // Top
-  ctx.fillRect(44, 16, 4, 4)
-  // Bottom
-  ctx.fillRect(48, 16, 4, 4)
-  // Right
-  ctx.fillRect(40, 20, 4, 12)
-  // Front
-  ctx.fillRect(44, 20, 4, 12)
-  // Left
-  ctx.fillRect(48, 20, 4, 12)
-  // Back
-  ctx.fillRect(52, 20, 4, 12)
-
-  // ============================================
-  // SECOND LAYER - OVERLAY (Right half - pixels 32-63)
-  // ============================================
-
-  // HEAD - Outer Layer (Hat/Helmet overlay)
-  if (headOverlayEnabled.checked) {
-    const headOverlayMaterial = sceneManager.getHeadOverlayMesh().material as THREE.MeshLambertMaterial
-    const headOverlayColorStr = `#${headOverlayMaterial.color.getHexString()}`
-    ctx.fillStyle = headOverlayColorStr
-    ctx.globalAlpha = 1.0
-  } else {
-    ctx.globalAlpha = 0.0 // Transparent overlay
-  }
-  // Top
-  ctx.fillRect(40, 0, 8, 8)
-  // Bottom
-  ctx.fillRect(48, 0, 8, 8)
-  // Right
-  ctx.fillRect(32, 8, 8, 8)
-  // Front
-  ctx.fillRect(40, 8, 8, 8)
-  // Left
-  ctx.fillRect(48, 8, 8, 8)
-  // Back
-  ctx.fillRect(56, 8, 8, 8)
-  ctx.globalAlpha = 1.0
-
-  // LEFT LEG - Base Layer (4x12x4)
-  ctx.fillStyle = legColor
-  // Top
-  ctx.fillRect(20, 48, 4, 4)
-  // Bottom
-  ctx.fillRect(24, 48, 4, 4)
-  // Right
-  ctx.fillRect(16, 52, 4, 12)
-  // Front
-  ctx.fillRect(20, 52, 4, 12)
-  // Left
-  ctx.fillRect(24, 52, 4, 12)
-  // Back
-  ctx.fillRect(28, 52, 4, 12)
-
-  // LEFT ARM - Base Layer (4x12x4)
-  ctx.fillStyle = armColor
-  // Top
-  ctx.fillRect(36, 48, 4, 4)
-  // Bottom
-  ctx.fillRect(40, 48, 4, 4)
-  // Right
-  ctx.fillRect(32, 52, 4, 12)
-  // Front
-  ctx.fillRect(36, 52, 4, 12)
-  // Left
-  ctx.fillRect(40, 52, 4, 12)
-  // Back
-  ctx.fillRect(44, 52, 4, 12)
-
-  // BODY - Outer Layer (jacket overlay)
-  if (bodyOverlayEnabled.checked) {
-    const bodyOverlayMaterial = sceneManager.getBodyOverlayMesh().material as THREE.MeshLambertMaterial
-    const bodyOverlayColorStr = `#${bodyOverlayMaterial.color.getHexString()}`
-    ctx.fillStyle = bodyOverlayColorStr
-    ctx.globalAlpha = 1.0
-  } else {
-    ctx.globalAlpha = 0.0
-  }
-  // Top
-  ctx.fillRect(20, 32, 8, 4)
-  // Bottom
-  ctx.fillRect(28, 32, 8, 4)
-  // Right
-  ctx.fillRect(16, 36, 4, 12)
-  // Front
-  ctx.fillRect(20, 36, 8, 12)
-  // Left
-  ctx.fillRect(28, 36, 4, 12)
-  // Back
-  ctx.fillRect(32, 36, 8, 12)
-  ctx.globalAlpha = 1.0
-
-  // RIGHT ARM - Outer Layer (sleeve overlay)
-  if (armsOverlayEnabled.checked) {
-    const armsOverlayMaterial = sceneManager.getRightArmOverlayMesh().material as THREE.MeshLambertMaterial
-    const armsOverlayColorStr = `#${armsOverlayMaterial.color.getHexString()}`
-    ctx.fillStyle = armsOverlayColorStr
-    ctx.globalAlpha = 1.0
-  } else {
-    ctx.globalAlpha = 0.0
-  }
-  // Top
-  ctx.fillRect(44, 32, 4, 4)
-  // Bottom
-  ctx.fillRect(48, 32, 4, 4)
-  // Right
-  ctx.fillRect(40, 36, 4, 12)
-  // Front
-  ctx.fillRect(44, 36, 4, 12)
-  // Left
-  ctx.fillRect(48, 36, 4, 12)
-  // Back
-  ctx.fillRect(52, 36, 4, 12)
-  ctx.globalAlpha = 1.0
-
-  // LEFT LEG - Outer Layer (pants overlay)
-  if (legsOverlayEnabled.checked) {
-    const legsOverlayMaterial = sceneManager.getRightLegOverlayMesh().material as THREE.MeshLambertMaterial
-    const legsOverlayColorStr = `#${legsOverlayMaterial.color.getHexString()}`
-    ctx.fillStyle = legsOverlayColorStr
-    ctx.globalAlpha = 1.0
-  } else {
-    ctx.globalAlpha = 0.0
-  }
-  // Top
-  ctx.fillRect(4, 48, 4, 4)
-  // Bottom
-  ctx.fillRect(8, 48, 4, 4)
-  // Right
-  ctx.fillRect(0, 52, 4, 12)
-  // Front
-  ctx.fillRect(4, 52, 4, 12)
-  // Left
-  ctx.fillRect(8, 52, 4, 12)
-  // Back
-  ctx.fillRect(12, 52, 4, 12)
-  ctx.globalAlpha = 1.0
-
-  // LEFT ARM - Outer Layer (sleeve overlay)
-  if (armsOverlayEnabled.checked) {
-    const armsOverlayMaterial = sceneManager.getLeftArmOverlayMesh().material as THREE.MeshLambertMaterial
-    const armsOverlayColorStr = `#${armsOverlayMaterial.color.getHexString()}`
-    ctx.fillStyle = armsOverlayColorStr
-    ctx.globalAlpha = 1.0
-  } else {
-    ctx.globalAlpha = 0.0
-  }
-  // Top
-  ctx.fillRect(52, 48, 4, 4)
-  // Bottom
-  ctx.fillRect(56, 48, 4, 4)
-  // Right
-  ctx.fillRect(48, 52, 4, 12)
-  // Front
-  ctx.fillRect(52, 52, 4, 12)
-  // Left
-  ctx.fillRect(56, 52, 4, 12)
-  // Back
-  ctx.fillRect(60, 52, 4, 12)
-  ctx.globalAlpha = 1.0
-
-  return canvas
-}
-
-downloadSkinButton?.addEventListener('click', () => {
-  const canvas = generateSkinTexture()
-
-  // Convert canvas to blob and download
-  canvas.toBlob((blob) => {
-    if (blob) {
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.download = 'minecraft-skin.png'
-      link.href = url
-      link.click()
-      URL.revokeObjectURL(url)
-    }
-  }, 'image/png')
-})
 
 // Animation controls
 walkAnimationCheckbox?.addEventListener('change', (e) => {
@@ -509,3 +279,59 @@ const sidebar = document.getElementById('sidebar')
 sidebarToggle?.addEventListener('click', () => {
   sidebar?.classList.toggle('sidebar-open')
 })
+
+// ============================================
+// LocalStorage functions
+// ============================================
+
+const SKIN_STORAGE_KEY = 'minecraft-skin-texture'
+
+// Save skin texture to localStorage
+function saveSkinToLocalStorage(canvas: HTMLCanvasElement) {
+  try {
+    const dataURL = canvas.toDataURL('image/png')
+    localStorage.setItem(SKIN_STORAGE_KEY, dataURL)
+    console.log('Skin saved to localStorage')
+  } catch (error) {
+    console.error('Failed to save skin to localStorage:', error)
+  }
+}
+
+// Load skin texture from localStorage
+function loadSkinFromLocalStorage() {
+  try {
+    const dataURL = localStorage.getItem(SKIN_STORAGE_KEY)
+    if (!dataURL) {
+      console.log('No saved skin found in localStorage')
+      return
+    }
+
+    const img = new Image()
+    img.onload = () => {
+      // Create canvas and draw the image
+      const canvas = document.createElement('canvas')
+      canvas.width = 64
+      canvas.height = 64
+      const ctx = canvas.getContext('2d')!
+      ctx.drawImage(img, 0, 0)
+
+      // Apply to model
+      applyTextureToModel(canvas)
+
+      console.log('Skin loaded from localStorage')
+    }
+
+    img.onerror = () => {
+      console.error('Failed to load skin image from localStorage')
+      localStorage.removeItem(SKIN_STORAGE_KEY)
+    }
+
+    img.src = dataURL
+  } catch (error) {
+    console.error('Failed to load skin from localStorage:', error)
+    localStorage.removeItem(SKIN_STORAGE_KEY)
+  }
+}
+
+// Load saved skin from localStorage on startup (after all functions are defined)
+loadSkinFromLocalStorage()
