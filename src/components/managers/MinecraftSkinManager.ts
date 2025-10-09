@@ -27,6 +27,11 @@ export class MinecraftSkinManager {
     let m_leftArmOverlayMesh: THREE.Mesh
     let m_rightLegOverlayMesh: THREE.Mesh
     let m_leftLegOverlayMesh: THREE.Mesh
+    // Pivot groups for proper rotation
+    let m_rightArmGroup: THREE.Group
+    let m_leftArmGroup: THREE.Group
+    let m_rightLegGroup: THREE.Group
+    let m_leftLegGroup: THREE.Group
 
     this.setup = setup
     this.getScene = () => m_scene
@@ -48,6 +53,10 @@ export class MinecraftSkinManager {
     this.getLeftArmOverlayMesh = () => m_leftArmOverlayMesh
     this.getRightLegOverlayMesh = () => m_rightLegOverlayMesh
     this.getLeftLegOverlayMesh = () => m_leftLegOverlayMesh
+    this.getRightArmGroup = () => m_rightArmGroup
+    this.getLeftArmGroup = () => m_leftArmGroup
+    this.getRightLegGroup = () => m_rightLegGroup
+    this.getLeftLegGroup = () => m_leftLegGroup
     this.handleResize = handleResize
 
     function setup() {
@@ -99,35 +108,55 @@ export class MinecraftSkinManager {
       m_bodyMesh.name = 'body'
       m_skinModel.add(m_bodyMesh)
 
-      // Right Arm (4x12x4 pixels) - attached to top of body
+      // Right Arm (4x12x4 pixels) - with pivot at shoulder
       const armGeometry = new THREE.BoxGeometry(4 * pixelSize, 12 * pixelSize, 4 * pixelSize)
       const armMaterial = new THREE.MeshLambertMaterial({ color: 0xffdbac })
       m_rightArmMesh = new THREE.Mesh(armGeometry, armMaterial)
-      m_rightArmMesh.position.set(-6 * pixelSize, 18 * pixelSize, 0) // -6 from center, same height as body
+      m_rightArmMesh.position.y = -6 * pixelSize // Move down half the arm height from pivot
       m_rightArmMesh.name = 'rightArm'
-      m_skinModel.add(m_rightArmMesh)
 
-      // Left Arm (4x12x4 pixels)
+      // Create group for right arm at shoulder position
+      m_rightArmGroup = new THREE.Group()
+      m_rightArmGroup.position.set(-6 * pixelSize, 24 * pixelSize, 0) // Shoulder position (top of body)
+      m_rightArmGroup.add(m_rightArmMesh)
+      m_skinModel.add(m_rightArmGroup)
+
+      // Left Arm (4x12x4 pixels) - with pivot at shoulder
       const leftArmMaterial = new THREE.MeshLambertMaterial({ color: 0xffdbac })
       m_leftArmMesh = new THREE.Mesh(armGeometry.clone(), leftArmMaterial)
-      m_leftArmMesh.position.set(6 * pixelSize, 18 * pixelSize, 0) // +6 from center
+      m_leftArmMesh.position.y = -6 * pixelSize // Move down half the arm height from pivot
       m_leftArmMesh.name = 'leftArm'
-      m_skinModel.add(m_leftArmMesh)
 
-      // Right Leg (4x12x4 pixels)
+      // Create group for left arm at shoulder position
+      m_leftArmGroup = new THREE.Group()
+      m_leftArmGroup.position.set(6 * pixelSize, 24 * pixelSize, 0) // Shoulder position (top of body)
+      m_leftArmGroup.add(m_leftArmMesh)
+      m_skinModel.add(m_leftArmGroup)
+
+      // Right Leg (4x12x4 pixels) - with pivot at hip
       const legGeometry = new THREE.BoxGeometry(4 * pixelSize, 12 * pixelSize, 4 * pixelSize)
       const legMaterial = new THREE.MeshLambertMaterial({ color: 0x2c5aa0 })
       m_rightLegMesh = new THREE.Mesh(legGeometry, legMaterial)
-      m_rightLegMesh.position.set(-2 * pixelSize, 6 * pixelSize, 0) // -2 from center, 6 = half leg height
+      m_rightLegMesh.position.y = -6 * pixelSize // Move down half the leg height from pivot
       m_rightLegMesh.name = 'rightLeg'
-      m_skinModel.add(m_rightLegMesh)
 
-      // Left Leg (4x12x4 pixels)
+      // Create group for right leg at hip position
+      m_rightLegGroup = new THREE.Group()
+      m_rightLegGroup.position.set(-2 * pixelSize, 12 * pixelSize, 0) // Hip position (bottom of body)
+      m_rightLegGroup.add(m_rightLegMesh)
+      m_skinModel.add(m_rightLegGroup)
+
+      // Left Leg (4x12x4 pixels) - with pivot at hip
       const leftLegMaterial = new THREE.MeshLambertMaterial({ color: 0x2c5aa0 })
       m_leftLegMesh = new THREE.Mesh(legGeometry.clone(), leftLegMaterial)
-      m_leftLegMesh.position.set(2 * pixelSize, 6 * pixelSize, 0) // +2 from center
+      m_leftLegMesh.position.y = -6 * pixelSize // Move down half the leg height from pivot
       m_leftLegMesh.name = 'leftLeg'
-      m_skinModel.add(m_leftLegMesh)
+
+      // Create group for left leg at hip position
+      m_leftLegGroup = new THREE.Group()
+      m_leftLegGroup.position.set(2 * pixelSize, 12 * pixelSize, 0) // Hip position (bottom of body)
+      m_leftLegGroup.add(m_leftLegMesh)
+      m_skinModel.add(m_leftLegGroup)
 
       // ============================================
       // OVERLAY LAYERS (slightly larger, initially hidden)
@@ -152,39 +181,39 @@ export class MinecraftSkinManager {
       m_bodyOverlayMesh.visible = false
       m_skinModel.add(m_bodyOverlayMesh)
 
-      // Right Arm Overlay (Sleeve)
+      // Right Arm Overlay (Sleeve) - add to arm group
       const armOverlayGeometry = new THREE.BoxGeometry(4 * pixelSize * overlayScale, 12 * pixelSize * overlayScale, 4 * pixelSize * overlayScale)
       const rightArmOverlayMaterial = new THREE.MeshLambertMaterial({ color: 0x0000ff, transparent: true, opacity: 0.8 })
       m_rightArmOverlayMesh = new THREE.Mesh(armOverlayGeometry, rightArmOverlayMaterial)
       m_rightArmOverlayMesh.position.copy(m_rightArmMesh.position)
       m_rightArmOverlayMesh.name = 'rightArmOverlay'
       m_rightArmOverlayMesh.visible = false
-      m_skinModel.add(m_rightArmOverlayMesh)
+      m_rightArmGroup.add(m_rightArmOverlayMesh)
 
-      // Left Arm Overlay (Sleeve)
+      // Left Arm Overlay (Sleeve) - add to arm group
       const leftArmOverlayMaterial = new THREE.MeshLambertMaterial({ color: 0x0000ff, transparent: true, opacity: 0.8 })
       m_leftArmOverlayMesh = new THREE.Mesh(armOverlayGeometry.clone(), leftArmOverlayMaterial)
       m_leftArmOverlayMesh.position.copy(m_leftArmMesh.position)
       m_leftArmOverlayMesh.name = 'leftArmOverlay'
       m_leftArmOverlayMesh.visible = false
-      m_skinModel.add(m_leftArmOverlayMesh)
+      m_leftArmGroup.add(m_leftArmOverlayMesh)
 
-      // Right Leg Overlay (Pants)
+      // Right Leg Overlay (Pants) - add to leg group
       const legOverlayGeometry = new THREE.BoxGeometry(4 * pixelSize * overlayScale, 12 * pixelSize * overlayScale, 4 * pixelSize * overlayScale)
       const rightLegOverlayMaterial = new THREE.MeshLambertMaterial({ color: 0xffff00, transparent: true, opacity: 0.8 })
       m_rightLegOverlayMesh = new THREE.Mesh(legOverlayGeometry, rightLegOverlayMaterial)
       m_rightLegOverlayMesh.position.copy(m_rightLegMesh.position)
       m_rightLegOverlayMesh.name = 'rightLegOverlay'
       m_rightLegOverlayMesh.visible = false
-      m_skinModel.add(m_rightLegOverlayMesh)
+      m_rightLegGroup.add(m_rightLegOverlayMesh)
 
-      // Left Leg Overlay (Pants)
+      // Left Leg Overlay (Pants) - add to leg group
       const leftLegOverlayMaterial = new THREE.MeshLambertMaterial({ color: 0xffff00, transparent: true, opacity: 0.8 })
       m_leftLegOverlayMesh = new THREE.Mesh(legOverlayGeometry.clone(), leftLegOverlayMaterial)
       m_leftLegOverlayMesh.position.copy(m_leftLegMesh.position)
       m_leftLegOverlayMesh.name = 'leftLegOverlay'
       m_leftLegOverlayMesh.visible = false
-      m_skinModel.add(m_leftLegOverlayMesh)
+      m_leftLegGroup.add(m_leftLegOverlayMesh)
 
       // Add grid floor
       const gridHelper = new THREE.GridHelper(10, 10, 0x444444, 0x888888)
@@ -224,5 +253,9 @@ export class MinecraftSkinManager {
   getLeftArmOverlayMesh!: () => THREE.Mesh
   getRightLegOverlayMesh!: () => THREE.Mesh
   getLeftLegOverlayMesh!: () => THREE.Mesh
+  getRightArmGroup!: () => THREE.Group
+  getLeftArmGroup!: () => THREE.Group
+  getRightLegGroup!: () => THREE.Group
+  getLeftLegGroup!: () => THREE.Group
   handleResize!: () => void
 }

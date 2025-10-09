@@ -428,13 +428,6 @@ downloadSkinButton?.addEventListener('click', () => {
 // Animation controls
 walkAnimationCheckbox?.addEventListener('change', (e) => {
   walkAnimation = (e.target as HTMLInputElement).checked
-  if (!walkAnimation) {
-    // Reset to neutral pose
-    sceneManager.getRightArmMesh().rotation.x = 0
-    sceneManager.getLeftArmMesh().rotation.x = 0
-    sceneManager.getRightLegMesh().rotation.x = 0
-    sceneManager.getLeftLegMesh().rotation.x = 0
-  }
 })
 
 animationSpeedSlider?.addEventListener('input', (e) => {
@@ -475,29 +468,29 @@ function animate() {
   if (walkAnimation) {
     animationTime += 0.05 * animationSpeed
 
-    const rightArmMesh = sceneManager.getRightArmMesh()
-    const leftArmMesh = sceneManager.getLeftArmMesh()
-    const rightLegMesh = sceneManager.getRightLegMesh()
-    const leftLegMesh = sceneManager.getLeftLegMesh()
+    // Get the groups (which contain both base mesh and overlay)
+    const rightArmGroup = sceneManager.getRightArmGroup()
+    const leftArmGroup = sceneManager.getLeftArmGroup()
+    const rightLegGroup = sceneManager.getRightLegGroup()
+    const leftLegGroup = sceneManager.getLeftLegGroup()
 
-    // Overlay meshes
-    const rightArmOverlay = sceneManager.getRightArmOverlayMesh()
-    const leftArmOverlay = sceneManager.getLeftArmOverlayMesh()
-    const rightLegOverlay = sceneManager.getRightLegOverlayMesh()
-    const leftLegOverlay = sceneManager.getLeftLegOverlayMesh()
-
-    // Swing arms and legs (opposite motion)
+    // Swing arms and legs (opposite motion) - rotate the groups from shoulder/hip
     const swing = Math.sin(animationTime) * 0.5
-    rightArmMesh.rotation.x = swing
-    leftArmMesh.rotation.x = -swing
-    rightLegMesh.rotation.x = -swing
-    leftLegMesh.rotation.x = swing
+    rightArmGroup.rotation.x = swing
+    leftArmGroup.rotation.x = -swing
+    rightLegGroup.rotation.x = -swing
+    leftLegGroup.rotation.x = swing
+  } else {
+    // Reset to neutral pose when animation is disabled
+    const rightArmGroup = sceneManager.getRightArmGroup()
+    const leftArmGroup = sceneManager.getLeftArmGroup()
+    const rightLegGroup = sceneManager.getRightLegGroup()
+    const leftLegGroup = sceneManager.getLeftLegGroup()
 
-    // Sync overlay rotations
-    rightArmOverlay.rotation.x = swing
-    leftArmOverlay.rotation.x = -swing
-    rightLegOverlay.rotation.x = -swing
-    leftLegOverlay.rotation.x = swing
+    rightArmGroup.rotation.x = 0
+    leftArmGroup.rotation.x = 0
+    rightLegGroup.rotation.x = 0
+    leftLegGroup.rotation.x = 0
   }
 
   // Update controls
