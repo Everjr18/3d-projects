@@ -214,6 +214,30 @@ class PreviewScene {
         this.camera.position.z = 4
         break
 
+      case 'sphereMesh':
+        const sphereGeometry = new THREE.SphereGeometry(1.2, 32, 32)
+        const sphereMaterial = new THREE.MeshStandardMaterial({
+          color: 0xffff00,
+          metalness: 0.3,
+          roughness: 0.4,
+        })
+        mesh = new THREE.Mesh(sphereGeometry, sphereMaterial)
+        this.currentObject = mesh
+        this.camera.position.z = 3
+        break
+
+      case 'pyramidMesh':
+        const pyramidGeometry = new THREE.ConeGeometry(1.0, 2.5, 4)
+        const pyramidMaterial = new THREE.MeshStandardMaterial({
+          color: 0xff6600,
+          metalness: 0.3,
+          roughness: 0.4,
+        })
+        mesh = new THREE.Mesh(pyramidGeometry, pyramidMaterial)
+        this.currentObject = mesh
+        this.camera.position.z = 4
+        break
+
       default:
         return
     }

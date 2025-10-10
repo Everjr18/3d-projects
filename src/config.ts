@@ -103,6 +103,19 @@ export const CELESTIAL_OBJECTS = {
     height: 2.5,
     color: 0xff00ff,
   },
+  SPHERE: {
+    name: 'sphereMesh',
+    position: { x: 0, y: 0, z: -3 },
+    radius: 1.2,
+    color: 0xffff00,
+  },
+  PYRAMID: {
+    name: 'pyramidMesh',
+    position: { x: 0, y: 0, z: 3 },
+    radius: 1.0,
+    height: 2.5,
+    color: 0xff6600,
+  },
 }
 
 export const LIGHTS = {

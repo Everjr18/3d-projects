@@ -25,7 +25,7 @@ function animate() {
 
   // Rotate primitives
   sceneManager.getScene().traverse((object) => {
-    if (object.name === 'cubeMesh' || object.name === 'cylinderMesh') {
+    if (object.name === 'cubeMesh' || object.name === 'cylinderMesh' || object.name === 'sphereMesh' || object.name === 'pyramidMesh') {
       object.rotation.y += 0.01 * speed
       object.rotation.x += 0.005 * speed
     }

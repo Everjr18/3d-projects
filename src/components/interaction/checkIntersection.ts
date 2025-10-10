@@ -59,6 +59,12 @@ function checkIntersection(
         } else if (obj.object.name === 'cylinderMesh') {
           templateId = 'cylinderMesh-info'
           cameraOffset = { x: 5, y: 2, z: 5 }
+        } else if (obj.object.name === 'sphereMesh') {
+          templateId = 'sphereMesh-info'
+          cameraOffset = { x: 4, y: 2, z: 4 }
+        } else if (obj.object.name === 'pyramidMesh') {
+          templateId = 'pyramidMesh-info'
+          cameraOffset = { x: 4, y: 2, z: 4 }
         }
 
         if (templateId) {

@@ -3,6 +3,8 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { StarfieldComponent } from '../base/StarfieldComponent'
 import { createCube } from '../primitives/createCube'
 import { createCylinder } from '../primitives/createCylinder'
+import { createSphere } from '../primitives/createSphere'
+import { createPyramid } from '../primitives/createPyramid'
 import createCamera from '../scene/createCamera'
 import createRenderer from '../scene/createRenderer'
 import { SIDEBAR_WIDTH, CELESTIAL_OBJECTS, LIGHTS, CONTROLS } from '../../config'
@@ -88,6 +90,35 @@ export class PrimitivesManager {
         CELESTIAL_OBJECTS.CYLINDER.position.z
       )
       cylinderComponent.addToScene(m_scene)
+
+      // Crear esfera
+      const sphereComponent = createSphere(
+        CELESTIAL_OBJECTS.SPHERE.radius,
+        CELESTIAL_OBJECTS.SPHERE.color,
+        false
+      )
+      sphereComponent.setName(CELESTIAL_OBJECTS.SPHERE.name)
+      sphereComponent.setPosition(
+        CELESTIAL_OBJECTS.SPHERE.position.x,
+        CELESTIAL_OBJECTS.SPHERE.position.y,
+        CELESTIAL_OBJECTS.SPHERE.position.z
+      )
+      sphereComponent.addToScene(m_scene)
+
+      // Crear pirámide
+      const pyramidComponent = createPyramid(
+        CELESTIAL_OBJECTS.PYRAMID.radius,
+        CELESTIAL_OBJECTS.PYRAMID.height,
+        CELESTIAL_OBJECTS.PYRAMID.color,
+        false
+      )
+      pyramidComponent.setName(CELESTIAL_OBJECTS.PYRAMID.name)
+      pyramidComponent.setPosition(
+        CELESTIAL_OBJECTS.PYRAMID.position.x,
+        CELESTIAL_OBJECTS.PYRAMID.position.y,
+        CELESTIAL_OBJECTS.PYRAMID.position.z
+      )
+      pyramidComponent.addToScene(m_scene)
 
       window.addEventListener('resize', handleResize, false)
     }
