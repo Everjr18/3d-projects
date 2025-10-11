@@ -121,12 +121,12 @@ export const CELESTIAL_OBJECTS = {
 export const LIGHTS = {
   DIRECTIONAL: {
     color: 0xffffff,
-    intensity: 2.0,
+    intensity: 0.7,
     position: { x: -2, y: 0.5, z: 1.5 },
   },
   AMBIENT: {
     color: 0xffffff,
-    intensity: 0.3,
+    intensity: 0.1,
     position: { x: 0, y: 1, z: 0 },
   },
 }

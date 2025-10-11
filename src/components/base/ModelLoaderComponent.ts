@@ -10,6 +10,7 @@ interface ModelConfig {
   scale?: number | { x: number; y: number; z: number }
   rotation?: { x: number; y: number; z: number }
   meshName?: string
+  centerGeometry?: boolean
 }
 
 export class ModelLoaderComponent extends SceneObject {
@@ -40,10 +41,6 @@ export class ModelLoaderComponent extends SceneObject {
             objLoader.load(
               config.objPath,
               (root) => {
-                if (config.position) {
-                  root.position.set(config.position.x, config.position.y, config.position.z)
-                }
-
                 if (config.scale) {
                   if (typeof config.scale === 'number') {
                     root.scale.setScalar(config.scale)
@@ -63,6 +60,23 @@ export class ModelLoaderComponent extends SceneObject {
                       child.name = config.meshName
                     }
                   })
+                }
+
+                // Center geometry if requested - do this after scale/rotation
+                if (config.centerGeometry) {
+                  const box = new THREE.Box3().setFromObject(root)
+                  const center = box.getCenter(new THREE.Vector3())
+
+                  // Offset all children by the negative center
+                  root.traverse((child) => {
+                    if (child instanceof THREE.Mesh) {
+                      child.geometry.translate(-center.x, -center.y, -center.z)
+                    }
+                  })
+                }
+
+                if (config.position) {
+                  root.position.set(config.position.x, config.position.y, config.position.z)
                 }
 
                 m_group.add(root)

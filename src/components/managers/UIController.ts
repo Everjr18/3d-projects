@@ -18,6 +18,9 @@ export class UIController {
     this.getRotationSpeed = () => m_rotationSpeed
     this.getStarsSpeed = () => m_starsSpeed
     this.getAutoRotateCamera = () => m_autoRotateCamera
+    this.setRotationSpeed = (speed: number) => { m_rotationSpeed = speed }
+    this.setStarsSpeed = (speed: number) => { m_starsSpeed = speed }
+    this.setAutoRotateCamera = (value: boolean) => { m_autoRotateCamera = value }
 
     function setup() {
       const brightnessSlider = document.getElementById('brightness-slider') as HTMLInputElement
@@ -97,4 +100,7 @@ export class UIController {
   getRotationSpeed!: () => number
   getStarsSpeed!: () => number
   getAutoRotateCamera!: () => boolean
+  setRotationSpeed!: (speed: number) => void
+  setStarsSpeed!: (speed: number) => void
+  setAutoRotateCamera!: (value: boolean) => void
 }

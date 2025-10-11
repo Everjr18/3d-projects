@@ -16,6 +16,7 @@ export class Objects3DManager {
     let m_sunLight: THREE.DirectionalLight
     let m_ambientLight: THREE.AmbientLight
     let m_starfield: THREE.Points
+    let m_skullGroup: THREE.Group | null = null
 
     this.setup = setup
     this.getScene = () => m_scene
@@ -25,6 +26,7 @@ export class Objects3DManager {
     this.getSunLight = () => m_sunLight
     this.getAmbientLight = () => m_ambientLight
     this.getStarfield = () => m_starfield
+    this.getSkullGroup = () => m_skullGroup
     this.handleResize = handleResize
 
     function setup() {
@@ -67,7 +69,9 @@ export class Objects3DManager {
         scale: CELESTIAL_OBJECTS.SKULL.scale,
         rotation: CELESTIAL_OBJECTS.SKULL.rotation,
         meshName: CELESTIAL_OBJECTS.SKULL.name,
+        centerGeometry: true, // Center the geometry for proper rotation
       }).then(() => {
+        m_skullGroup = skullComponent.getObject3D() as THREE.Group
         skullComponent.addToScene(m_scene)
 
         const skullLight = new THREE.PointLight(
@@ -101,5 +105,6 @@ export class Objects3DManager {
   getSunLight!: () => THREE.DirectionalLight
   getAmbientLight!: () => THREE.AmbientLight
   getStarfield!: () => THREE.Points
+  getSkullGroup!: () => THREE.Group | null
   handleResize!: () => void
 }

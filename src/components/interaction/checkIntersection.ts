@@ -29,7 +29,7 @@ function checkIntersection(
   const intersects = raycaster.intersectObjects(scene.children, true) // true para buscar en objetos hijos
 
   // Si se hace clic en un objeto, mostrar info en el sidebar
-  if (intersects.length > 0 && infoContainer) {
+  if (intersects.length > 0) {
     for (const obj of intersects) {
       if (obj.object instanceof THREE.Mesh) {
         const worldPosition = new THREE.Vector3()
@@ -68,11 +68,19 @@ function checkIntersection(
         }
 
         if (templateId) {
-          const template = document.getElementById(templateId) as HTMLTemplateElement
-          if (template) {
-            infoContainer.innerHTML = ''
-            const content = template.content.cloneNode(true)
-            infoContainer.appendChild(content)
+          // Update info container if it exists (for old HTML pages)
+          if (infoContainer) {
+            const template = document.getElementById(templateId) as HTMLTemplateElement
+            if (template) {
+              infoContainer.innerHTML = ''
+              const content = template.content.cloneNode(true)
+              infoContainer.appendChild(content)
+            }
+          }
+
+          // Notify React about the selected object
+          if ((window as any).setSelectedObject) {
+            (window as any).setSelectedObject(obj.object.name)
           }
 
           // Show preview

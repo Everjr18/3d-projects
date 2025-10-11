@@ -7,7 +7,8 @@ const createRenderer = () => {
     const renderer = new THREE.WebGLRenderer({antialias: true})
     renderer.setSize(w, h)
     renderer.toneMapping = THREE.ACESFilmicToneMapping
-    renderer.outputColorSpace = THREE.LinearSRGBColorSpace
+    renderer.toneMappingExposure = 0.8
+    renderer.outputColorSpace = THREE.SRGBColorSpace
     return renderer
 }
 

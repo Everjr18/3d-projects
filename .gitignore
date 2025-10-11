@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Old/archived files (optional - uncomment to ignore)
+# _old/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

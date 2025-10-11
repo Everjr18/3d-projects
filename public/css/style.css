@@ -58,13 +58,21 @@ aside {
     box-shadow: none !important;
   }
 
-  #sidebar > div > a,
-  #sidebar > div > div > *:not(:has(#sidebar-toggle)) {
+  /* Ocultar todo excepto el toggle button cuando está cerrado */
+  #sidebar:not(.sidebar-open) > div > div:first-child > a,
+  #sidebar:not(.sidebar-open) > div > div:not(:first-child) {
     opacity: 0 !important;
     transition: opacity 0.3s ease-in-out;
     pointer-events: none;
   }
 
+  /* El toggle button siempre visible */
+  #sidebar:not(.sidebar-open) #sidebar-toggle {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  /* Mostrar sidebar cuando está abierto */
   #sidebar.sidebar-open {
     transform: translateX(0) !important;
     background-color: #1a1a1a !important;
@@ -72,8 +80,9 @@ aside {
     overflow-y: scroll !important;
   }
 
-  #sidebar.sidebar-open > div > a,
-  #sidebar.sidebar-open > div > div > *:not(:has(#sidebar-toggle)) {
+  /* Mostrar contenido cuando está abierto */
+  #sidebar.sidebar-open > div > div:first-child > a,
+  #sidebar.sidebar-open > div > div:not(:first-child) {
     opacity: 1 !important;
     pointer-events: auto;
   }
